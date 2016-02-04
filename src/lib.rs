@@ -1,3 +1,5 @@
+mod manager;
+
 #[cfg(test)]
 mod test {
     #[test]
