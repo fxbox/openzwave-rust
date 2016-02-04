@@ -1,0 +1,6 @@
+[package]
+name = "foxbox-adapter-zwave"
+version = "0.1.0"
+authors = ["Julien Wajsberg <felash@gmail.com>"]
+
+[dependencies]
