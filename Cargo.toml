@@ -2,6 +2,11 @@
 name = "foxbox-adapter-zwave"
 version = "0.1.0"
 authors = ["Julien Wajsberg <felash@gmail.com>"]
+build = "build.rs"
+links = "openzwave"
 
 [dependencies]
-libc = "0.2.0"
+libc = "0.2.6"
+
+[build-dependencies]
+gcc = "0.3.21"
