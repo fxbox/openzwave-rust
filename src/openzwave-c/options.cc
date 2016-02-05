@@ -12,4 +12,16 @@ OpenZWave::Options * options_create(char const *_configPath, char const *_userPa
   return OpenZWave::Options::Create(configPath, userPath, commandLine);
 }
 
+OpenZWave::Options * options_get() {
+  return OpenZWave::Options::Get();
+}
+
+bool options_lock(OpenZWave::Options * options) {
+  return options->Lock();
+}
+
+bool options_destroy() {
+  return OpenZWave::Options::Destroy();
+}
+
 }  // extern "C"

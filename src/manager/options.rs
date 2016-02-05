@@ -1,10 +1,13 @@
 #[link(name = "openzwave-c", kind = "static")]
 mod extern_options {
-    use libc::{size_t, c_int, c_char};
+    use libc::c_char;
 
     pub enum Options {}
     extern {
         pub fn options_create(configPath: *const c_char, userPath: *const c_char, commandLine: *const c_char) -> *mut Options;
+        pub fn options_get() -> *mut Options;
+        pub fn options_lock(options: *mut Options) -> bool;
+        pub fn options_destroy() -> bool;
     }
 }
 
@@ -16,5 +19,31 @@ pub fn create(config_path: &str, user_path: &str, command_line: &str) {
     let command_line_c = CString::new(command_line).unwrap();
     unsafe {
         extern_options::options_create(config_path_c.as_ptr(), user_path_c.as_ptr(), command_line_c.as_ptr());
+    }
+}
+
+pub struct Options {
+    ptr: *mut extern_options::Options
+}
+
+pub fn get() -> Options {
+    let external_options = unsafe { extern_options::options_get() };
+    Options { ptr: external_options }
+}
+
+fn res_to_result(res: bool) -> Result<(), ()> {
+    match res {
+        true => Ok(()),
+        false => Err(())
+    }
+}
+
+pub fn destroy() -> Result<(), ()> {
+    res_to_result(unsafe { extern_options::options_destroy() })
+}
+
+impl Options {
+    pub fn lock(&mut self) -> Result<(), ()> {
+        res_to_result(unsafe { extern_options::options_lock(self.ptr) })
     }
 }
