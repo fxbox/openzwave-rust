@@ -1,5 +1,5 @@
 [package]
-name = "foxbox-adapter-zwave"
+name = "openzwave"
 version = "0.1.0"
 authors = ["Julien Wajsberg <felash@gmail.com>"]
 build = "build.rs"
