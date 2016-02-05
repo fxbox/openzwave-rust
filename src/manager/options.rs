@@ -10,7 +10,7 @@ mod extern_options {
 
 use std::ffi::CString;
 
-pub fn options_create(config_path: &str, user_path: &str, command_line: &str) {
+pub fn create(config_path: &str, user_path: &str, command_line: &str) {
     let config_path_c = CString::new(config_path).unwrap();
     let user_path_c = CString::new(user_path).unwrap();
     let command_line_c = CString::new(command_line).unwrap();

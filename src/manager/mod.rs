@@ -1,2 +1,2 @@
-mod options;
+pub mod options;
 

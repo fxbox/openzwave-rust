@@ -1,6 +1,6 @@
 extern crate libc;
 
-mod manager;
+pub mod manager;
 
 #[cfg(test)]
 mod test {
