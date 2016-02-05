@@ -1,3 +1,5 @@
+extern crate libc;
+
 mod manager;
 
 #[cfg(test)]
