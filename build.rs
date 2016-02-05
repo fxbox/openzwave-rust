@@ -5,4 +5,6 @@ fn main() {
     c.file("src/openzwave-c/options.cc")
      .cpp(true)
      .compile("libopenzwave-c.a");
+    println!("cargo:rustc-flags=-l openzwave");
+    //println!("cargo:rustc-link-lib=static=foo")
 }
