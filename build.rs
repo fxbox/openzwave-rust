@@ -1,5 +1,8 @@
 extern crate gcc;
 
 fn main() {
-    gcc::compile_library("libopenzwave-c.a", &["src/openzwave-c/options.cc"]);
+    let mut c = gcc::Config::new();
+    c.file("src/openzwave-c/options.cc")
+     .cpp(true)
+     .compile("libopenzwave-c.a");
 }
