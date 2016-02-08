@@ -12,13 +12,20 @@ mod extern_options {
 }
 
 use std::ffi::CString;
+use utils::res_to_result;
 
-pub fn create(config_path: &str, user_path: &str, command_line: &str) {
+pub fn create(config_path: &str, user_path: &str, command_line: &str) -> Result<Options, ()> {
     let config_path_c = CString::new(config_path).unwrap();
     let user_path_c = CString::new(user_path).unwrap();
     let command_line_c = CString::new(command_line).unwrap();
-    unsafe {
-        extern_options::options_create(config_path_c.as_ptr(), user_path_c.as_ptr(), command_line_c.as_ptr());
+    let external_options = unsafe {
+        extern_options::options_create(config_path_c.as_ptr(), user_path_c.as_ptr(), command_line_c.as_ptr())
+    };
+
+    if external_options.is_null() {
+        Err(())
+    } else {
+        Ok(Options { ptr: external_options })
     }
 }
 
@@ -26,15 +33,12 @@ pub struct Options {
     ptr: *mut extern_options::Options
 }
 
-pub fn get() -> Options {
+pub fn get() -> Option<Options> {
     let external_options = unsafe { extern_options::options_get() };
-    Options { ptr: external_options }
-}
-
-fn res_to_result(res: bool) -> Result<(), ()> {
-    match res {
-        true => Ok(()),
-        false => Err(())
+    if external_options.is_null() {
+        None
+    } else {
+        Some(Options { ptr: external_options })
     }
 }
 
