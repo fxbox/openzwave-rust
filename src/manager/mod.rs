@@ -19,6 +19,7 @@ mod extern_manager {
 }
 
 use utils::res_to_result;
+use libc::c_void;
 
 pub struct Manager {
     ptr: *mut extern_manager::Manager
@@ -47,27 +48,39 @@ pub fn destroy() {
 }
 
 pub struct Notification {
-    a: i32
+    pub a: i32
 }
 
 pub struct Watcher {
-    cb: fn(notification: Notification)
+    cb: Box<FnMut(Notification) -> ()>
 }
 
-extern "C" fn watcher_cb(notification: *const extern_manager::Notification, watcher: *mut Watcher) {
-    (*watcher).cb(Notification { a: 2 }); // TODO use thread synchronization
+impl Watcher {
+    pub fn new<F: 'static>(callback: F) -> Watcher
+    where F: FnMut(Notification) -> () {
+        Watcher {
+            cb: Box::new(callback)
+        }
+    }
+}
+
+extern "C" fn watcher_cb(notification: *const extern_manager::Notification, watcher: *mut c_void) {
+    let watcher: &mut Watcher = unsafe { &mut *(watcher as *mut Watcher) };
+    (watcher.cb)(Notification { a: 2 }); // TODO use thread synchronization
 }
 
 impl Manager {
-    pub fn add_watcher(&mut self, watcher: &mut Watcher) {
+    pub fn add_watcher(&mut self, watcher: &mut Watcher) -> Result<(), ()> {
+        let watcher_ptr: *mut c_void = watcher as *mut _ as *mut c_void;
         res_to_result(unsafe {
-            extern_manager::manager_add_watcher(self.ptr, watcher_cb, &mut watcher)
+            extern_manager::manager_add_watcher(self.ptr, watcher_cb, watcher_ptr)
         })
     }
 
-    pub fn remove_watcher(&mut self, watcher: &Watcher) -> Result<(), ()> {
+    pub fn remove_watcher(&mut self, watcher: &mut Watcher) -> Result<(), ()> {
+        let watcher_ptr: *mut c_void = watcher as *mut _ as *mut c_void;
         res_to_result(unsafe {
-            extern_manager::manager_remove_watcher(self.ptr, watcher_cb, &mut watcher)
+            extern_manager::manager_remove_watcher(self.ptr, watcher_cb, watcher_ptr)
         })
     }
 }
