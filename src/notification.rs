@@ -74,6 +74,12 @@ pub struct Notification {
     ptr: *const extern_notification::Notification
 }
 
+// This is used in Notification::get_as_string.
+// The argument `data` is assumed to have a final \0, it's a valid C string.
+// This function needs to allocate a Rust-owned memory space to copy this string too. Here we use
+// to_string_lossy ant into_owned to ensure this. Then we use CString::into_raw to get a char*
+// we'll pass back to the C function, that will return it. Then in our get_as_string wrapper we'll
+// transform this back into a CString using from_raw.
 extern "C" fn get_as_string_callback(data: *const c_char) -> *const c_char {
     let str = unsafe { CStr::from_ptr(data) }.to_string_lossy().into_owned();
 

@@ -30,6 +30,12 @@ uint8 notification_get_notification(const Notification *);
 
 uint8 notification_get_byte(const Notification *);
 
+// RustStringCreator will be passed a NUL-ended C String so that it can
+// allocates a Rust-owned buffer. This is made necessary by OpenZWave's
+// Notification::GetAsString that returns a std::string by value and thus that
+// will be deallocated after the end of the function. Another option would be to
+// parse std::string directly in Rust, but this would be
+// C++-implementation-dependent.
 char const * notification_get_as_string(const Notification *, const RustStringCreator);
 
 #ifdef __cplusplus

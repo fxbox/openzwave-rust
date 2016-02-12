@@ -44,7 +44,10 @@ extern "C" {
   }
 
   char const * notification_get_as_string(const Notification * notification, const RustStringCreator stringCreator) {
-    return stringCreator(notification->GetAsString().c_str());
+    // We can't just return c_str() because the underlying buffer for "string"
+    // would be deallocated after the end of this function. Thats why we have a
+    // complex dance with the Rust function stringCreator.
+    return stringCreator(notification->GetAsString().c_str()); // stringCreator expects a NUL-ended string.
   }
 
 }  // extern "C"
