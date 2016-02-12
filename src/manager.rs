@@ -1,9 +1,9 @@
 #[link(name = "openzwave-c", kind = "static")]
 mod extern_manager {
     use libc::{ c_void, c_char };
+    use notification::ExternNotification;
 
     pub enum Manager {}
-    pub enum Notification {} // TODO should likely be in its own mod
 
     #[repr(C)]
     pub enum ControllerInterface {
@@ -17,10 +17,10 @@ mod extern_manager {
         pub fn manager_get() -> *mut Manager;
         pub fn manager_destroy();
         pub fn manager_add_watcher(manager: *mut Manager,
-                                   cb: extern fn(notification: *const Notification, ctx: *mut c_void),
+                                   cb: extern fn(notification: *const ExternNotification, ctx: *mut c_void),
                                    ctx: *mut c_void) -> bool;
         pub fn manager_remove_watcher(manager: *mut Manager,
-                                      cb: extern fn(notification: *const Notification, ctx: *mut c_void),
+                                      cb: extern fn(notification: *const ExternNotification, ctx: *mut c_void),
                                       ctx: *mut c_void) -> bool;
         pub fn manager_add_driver(manager: *mut Manager,
                                   device: *const c_char,
@@ -33,6 +33,7 @@ mod extern_manager {
 use utils::res_to_result;
 use libc::c_void;
 use std::ffi::CString;
+use notification::{Notification, ExternNotification};
 
 pub struct Manager {
     ptr: *mut extern_manager::Manager
@@ -60,10 +61,6 @@ pub fn destroy() {
     unsafe { extern_manager::manager_destroy() }
 }
 
-pub struct Notification {
-    pub a: i32
-}
-
 pub struct Watcher {
     cb: Box<FnMut(Notification) -> ()>
 }
@@ -77,9 +74,9 @@ impl Watcher {
     }
 }
 
-extern "C" fn watcher_cb(notification: *const extern_manager::Notification, watcher: *mut c_void) {
+extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *mut c_void) {
     let watcher: &mut Watcher = unsafe { &mut *(watcher as *mut Watcher) };
-    (watcher.cb)(Notification { a: 2 }); // TODO use thread synchronization
+    (watcher.cb)(Notification::new(notification)); // TODO use thread synchronization
 }
 
 impl Manager {
