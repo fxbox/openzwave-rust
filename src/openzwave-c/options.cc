@@ -4,24 +4,24 @@
 
 extern "C" {
 
-OpenZWave::Options * options_create(char const *_configPath, char const *_userPath, char const *_commandLine) {
+Options * options_create(char const *_configPath, char const *_userPath, char const *_commandLine) {
   std::string configPath(_configPath);
   std::string userPath(_userPath);
   std::string commandLine(_commandLine);
 
-  return OpenZWave::Options::Create(configPath, userPath, commandLine);
+  return Options::Create(configPath, userPath, commandLine);
 }
 
-OpenZWave::Options * options_get() {
-  return OpenZWave::Options::Get();
+Options * options_get() {
+  return Options::Get();
 }
 
-bool options_lock(OpenZWave::Options * options) {
+bool options_lock(Options * options) {
   return options->Lock();
 }
 
 bool options_destroy() {
-  return OpenZWave::Options::Destroy();
+  return Options::Destroy();
 }
 
 }  // extern "C"

@@ -3,8 +3,6 @@
 
 extern "C" {
 
-typedef OpenZWave::Manager Manager;
-
 Manager * manager_create() {
   return Manager::Create();
 }
