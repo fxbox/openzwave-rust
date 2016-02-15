@@ -34,31 +34,11 @@ use utils::res_to_result;
 use libc::c_void;
 use std::ffi::CString;
 use notification::{Notification, ExternNotification};
+use options::Options;
 
 pub struct Manager {
-    ptr: *mut extern_manager::Manager
-}
-
-pub fn create() -> Result<Manager, ()> {
-    let external_manager = unsafe { extern_manager::manager_create() };
-    if external_manager.is_null() {
-        Err(())
-    } else { 
-        Ok(Manager { ptr: external_manager })
-    }
-}
-
-pub fn get() -> Option<Manager> {
-    let external_manager = unsafe { extern_manager::manager_get() };
-    if external_manager.is_null() {
-        None
-    } else {
-        Some(Manager { ptr: external_manager })
-    }
-}
-
-pub fn destroy() {
-    unsafe { extern_manager::manager_destroy() }
+    ptr: *mut extern_manager::Manager,
+    options: Options
 }
 
 pub struct Watcher {
@@ -80,6 +60,25 @@ extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *mut 
 }
 
 impl Manager {
+    pub fn create(mut options: Options) -> Result<Manager, ()> {
+        try!(options.lock());
+        let external_manager = unsafe { extern_manager::manager_create() };
+        if external_manager.is_null() {
+            Err(())
+        } else { 
+            Ok(Manager { ptr: external_manager, options: options })
+        }
+    }
+
+    pub fn get() -> Option<Manager> {
+        let external_manager = unsafe { extern_manager::manager_get() };
+        if external_manager.is_null() {
+            None
+        } else {
+            Some(Manager { ptr: external_manager, options: Options::get().unwrap() })
+        }
+    }
+
     pub fn add_watcher(&mut self, watcher: &mut Watcher) -> Result<(), ()> {
         let watcher_ptr: *mut c_void = watcher as *mut _ as *mut c_void;
         res_to_result(unsafe {
@@ -115,3 +114,10 @@ impl Manager {
         })
     }
 }
+
+impl Drop for Manager {
+    fn drop(&mut self) {
+        unsafe { extern_manager::manager_destroy() }
+    }
+}
+
