@@ -76,12 +76,25 @@ impl Notification {
         }
     }
 
-    pub fn get_notification(&self) -> Option<u8> {
-        match self.get_type() {
+    pub fn get_notification(&self) -> Option<NotificationCode> {
+        let result = match self.get_type() {
             NotificationType::Type_Notification | NotificationType::Type_ControllerCommand =>
                 Some(unsafe { extern_notification:: notification_get_notification(self.ptr) }),
             _ => None
-        }
+        };
+
+        result.and_then(|code| {
+            match code {
+                0 => Some(NotificationCode::Code_MsgComplete),
+                1 => Some(NotificationCode::Code_Timeout),
+                2 => Some(NotificationCode::Code_NoOperation),
+                3 => Some(NotificationCode::Code_Awake),
+                4 => Some(NotificationCode::Code_Sleep),
+                5 => Some(NotificationCode::Code_Dead),
+                6 => Some(NotificationCode::Code_Alive),
+                _ => None
+            }
+        })
     }
 
     pub fn get_byte(&self) -> u8 {
