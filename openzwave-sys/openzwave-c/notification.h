@@ -1,4 +1,5 @@
 #include <openzwave/Notification.h>
+#include "utils.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,7 +9,6 @@ typedef OpenZWave::Notification Notification;
 typedef OpenZWave::ValueID ValueID;
 typedef Notification::NotificationType NotificationType;
 typedef Notification::NotificationCode NotificationCode;
-typedef char const * (*RustStringCreator) (char const *);
 
 NotificationType notification_get_type(const Notification *);
 

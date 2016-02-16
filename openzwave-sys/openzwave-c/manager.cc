@@ -33,4 +33,48 @@ bool manager_remove_driver(Manager * manager, const char * _controllerPath) {
   return manager->RemoveDriver(controllerPath);
 }
 
+uint8 manager_get_controller_node_id(Manager * manager, const uint32 home_id) {
+  return manager->GetControllerNodeId(home_id);
+}
+
+uint8 manager_get_suc_node_id(Manager * manager, const uint32 home_id) {
+  return manager->GetSUCNodeId(home_id);
+}
+
+bool manager_is_primary_controller(Manager * manager, const uint32 home_id) {
+  return manager->IsPrimaryController(home_id);
+}
+
+bool manager_is_bridge_controller(Manager * manager, const uint32 home_id) {
+  return manager->IsBridgeController(home_id);
+}
+
+uint32 manager_get_send_queue_count(Manager * manager, const uint32 home_id) {
+  return manager->GetSendQueueCount(home_id);
+}
+
+void manager_log_driver_statistics(Manager * manager, const uint32 home_id) {
+  manager->LogDriverStatistics(home_id);
+}
+
+Driver::ControllerInterface manager_get_controller_interface_type(Manager * manager, const uint32 home_id) {
+  return manager->GetControllerInterfaceType(home_id);
+}
+
+char const * manager_get_library_version(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+  // We can't just return c_str() because the underlying buffer for "string"
+  // would be deallocated after the end of this function. Thats why we have a
+  // complex dance with the Rust function stringCreator.
+  return stringCreator(manager->GetLibraryVersion(home_id).c_str()); // stringCreator expects a NUL-ended string.
+}
+
+char const * manager_get_library_type_name(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetLibraryTypeName(home_id).c_str());
+}
+
+char const * manager_get_controller_path(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetControllerPath(home_id).c_str());
+}
+
+
 }
