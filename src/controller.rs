@@ -43,6 +43,10 @@ impl Controller {
         }
     }
 
+    pub fn get_home_id(&self) -> u32 {
+        self.home_id
+    }
+
     network_impl! {
         get_controller_node_id -> u8,
         get_suc_node_id -> u8,
@@ -57,5 +61,30 @@ impl Controller {
         get_library_version,
         get_library_type_name,
         get_controller_path
+    }
+}
+
+use std::fmt::{ self, Debug, Display, Formatter };
+
+impl Display for Controller {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "{}", self.home_id)
+    }
+}
+
+impl Debug for Controller {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "Controller {{ home_id: {:?}, controller_node_id: {:?}, suc_node_id: {:?}, is_primary_controller: {:?}, is_bridge_controller: {:?}, send_queue_count: {:?}, controller_interface_type: {:?}, controller_path: {:?}, library_type_name: {:?}, library_version: {:?} }}",
+               self.home_id,
+               self.get_controller_node_id(),
+               self.get_suc_node_id(),
+               self.is_primary_controller(),
+               self.is_bridge_controller(),
+               self.get_send_queue_count(),
+               self.get_controller_interface_type(),
+               self.get_controller_path(),
+               self.get_library_type_name(),
+               self.get_library_version()
+              )
     }
 }

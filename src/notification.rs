@@ -11,6 +11,8 @@ pub struct Notification {
 
 impl Notification {
     pub fn new(ptr: *const ExternNotification) -> Notification {
+        // Because the Notification object is not mutable, we might as well just fetch all
+        // information right away and store it in a normal rust struct ?
         Notification {
             ptr: ptr
         }
