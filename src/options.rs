@@ -31,6 +31,12 @@ impl Options {
         }
     }
 
+    pub fn add_option_string(&mut self, name: &str, value: &str, append: bool) -> Result<(), ()> {
+        let name_c = CString::new(name).unwrap();
+        let value_c = CString::new(value).unwrap();
+        res_to_result(unsafe { extern_options::options_add_option_string(self.ptr, name_c.as_ptr(), value_c.as_ptr(), append) })
+    }
+
     pub fn lock(&mut self) -> Result<(), ()> {
         res_to_result(unsafe { extern_options::options_lock(self.ptr) })
     }
