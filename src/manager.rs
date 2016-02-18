@@ -108,25 +108,23 @@ c_like_enum! {
 
 pub struct Manager {
     ptr: *mut extern_manager::Manager,
-    options: Options
+    options: Options,
+    watchers: Vec<Option<Box<WatcherWrapper>>>
 }
 
-pub struct Watcher {
-    cb: Box<FnMut(Notification) -> ()>
+// TODO figure out how to make it work cross-thread
+pub trait NotificationWatcher /*: Sync*/ {
+    fn on_notification(&self, Notification);
 }
 
-impl Watcher {
-    pub fn new<F: 'static>(callback: F) -> Watcher
-    where F: FnMut(Notification) -> () {
-        Watcher {
-            cb: Box::new(callback)
-        }
-    }
+struct WatcherWrapper {
+    watcher: Box<NotificationWatcher>
 }
 
+// watcher is actually a Box<WatcherWrapper>
 extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *mut c_void) {
-    let watcher: &mut Watcher = unsafe { &mut *(watcher as *mut Watcher) };
-    (watcher.cb)(Notification::new(notification)); // TODO use thread synchronization
+    let watcher_wrapper: &mut WatcherWrapper = unsafe { &mut *(watcher as *mut WatcherWrapper) };
+    watcher_wrapper.watcher.on_notification(Notification::new(notification));
 }
 
 impl Manager {
@@ -135,11 +133,16 @@ impl Manager {
         let external_manager = unsafe { extern_manager::manager_create() };
         if external_manager.is_null() {
             Err(())
-        } else { 
-            Ok(Manager { ptr: external_manager, options: options })
+        } else {
+            Ok(Manager {
+                ptr: external_manager,
+                options: options,
+                watchers: Vec::with_capacity(1)
+            })
         }
     }
 
+    /* disable for now, we don't need this anywhere yet
     pub fn get() -> Option<Manager> {
         let external_manager = unsafe { extern_manager::manager_get() };
         if external_manager.is_null() {
@@ -148,16 +151,42 @@ impl Manager {
             Some(Manager { ptr: external_manager, options: Options::get().unwrap() })
         }
     }
+    */
 
-    pub fn add_watcher(&mut self, watcher: &mut Watcher) -> Result<(), ()> {
-        let watcher_ptr: *mut c_void = watcher as *mut _ as *mut c_void;
-        res_to_result(unsafe {
+    pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize, ()> {
+        let mut watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
+
+        let watcher_ptr: *mut c_void = &mut *watcher_wrapper as *mut _ as *mut c_void;
+        let api_res = unsafe {
             extern_manager::manager_add_watcher(self.ptr, watcher_cb, watcher_ptr)
-        })
+        };
+
+        if api_res {
+            let position = self.watchers.len();
+            self.watchers.push(Some(watcher_wrapper));
+            Ok(position)
+        } else {
+            Err(())
+        }
     }
 
-    pub fn remove_watcher(&mut self, watcher: &mut Watcher) -> Result<(), ()> {
-        let watcher_ptr: *mut c_void = watcher as *mut _ as *mut c_void;
+    pub fn remove_watcher(&mut self, position: usize) -> Result<(), ()> {
+        let wrapper = self.watchers[position].take();
+
+        if let Some(mut wrapper) = wrapper {
+            let result = self.remove_watcher_impl(&mut wrapper);
+            if result.is_err() {
+                // put the watcher back to the vec
+                self.watchers[position] = Some(wrapper);
+            }
+            result
+        } else {
+            Err(())
+        }
+    }
+
+    fn remove_watcher_impl(&self, wrapper: &mut WatcherWrapper) -> Result<(), ()> {
+        let watcher_ptr: *mut c_void = wrapper as *mut _ as *mut c_void;
         res_to_result(unsafe {
             extern_manager::manager_remove_watcher(self.ptr, watcher_cb, watcher_ptr)
         })
@@ -187,6 +216,13 @@ impl Manager {
 
 impl Drop for Manager {
     fn drop(&mut self) {
+        let watchers: Vec<_> = self.watchers.drain(..).collect();
+        for watcher in watchers {
+            if let Some(mut watcher) = watcher {
+                self.remove_watcher_impl(&mut watcher).unwrap();
+            }
+        }
+
         unsafe { extern_manager::manager_destroy() }
     }
 }
