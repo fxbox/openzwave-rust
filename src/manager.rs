@@ -4,6 +4,7 @@ use std::ffi::CString;
 use notification::{Notification, ExternNotification};
 use options::Options;
 use ffi::manager as extern_manager;
+use value_classes::value_id::ValueID;
 
 // Node stuff, will be moved to a separate mod
 // Mapping comes from https://github.com/OpenZWave/open-zwave-control-panel/blob/master/zwavelib.cpp
@@ -211,6 +212,54 @@ impl Manager {
         res_to_result(unsafe {
             extern_manager::manager_remove_driver(self.ptr, device.as_ptr())
         })
+    }
+
+    pub fn get_poll_interval(&mut self) -> i32 {
+        unsafe {
+            extern_manager::manager_get_poll_interval(self.ptr)
+        }
+    }
+
+    pub fn set_poll_interval(&mut self, interval_ms: i32, is_between_each_poll: bool) {
+        unsafe {
+            extern_manager::manager_set_poll_interval(self.ptr, interval_ms, is_between_each_poll)
+        }
+    }
+
+    pub fn enable_poll_with_intensity(&mut self, value: &ValueID, intensity: u8) -> bool {
+        unsafe {
+            extern_manager::manager_enable_poll_with_intensity(self.ptr, value.ptr, intensity)
+        }
+    }
+
+    pub fn enable_poll(&mut self, value: &ValueID) -> bool {
+        unsafe {
+            extern_manager::manager_enable_poll(self.ptr, value.ptr)
+        }
+    }
+
+    pub fn disable_poll(&mut self, value: &ValueID) -> bool {
+        unsafe {
+            extern_manager::manager_disable_poll(self.ptr, value.ptr)
+        }
+    }
+
+    pub fn is_polled(&mut self, value: &ValueID) -> bool {
+        unsafe {
+            extern_manager::manager_is_polled(self.ptr, value.ptr)
+        }
+    }
+
+    pub fn set_poll_intensity(&mut self, value: &ValueID, intensity: u8) {
+        unsafe {
+            extern_manager::manager_set_poll_intensity(self.ptr, value.ptr, intensity)
+        }
+    }
+
+    pub fn get_poll_intensity(&mut self, value: &ValueID) -> u8 {
+        unsafe {
+            extern_manager::manager_get_poll_intensity(self.ptr, value.ptr)
+        }
     }
 }
 

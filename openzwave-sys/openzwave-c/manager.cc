@@ -76,5 +76,36 @@ char const * manager_get_controller_path(Manager * manager, const uint32 home_id
   return stringCreator(manager->GetControllerPath(home_id).c_str());
 }
 
-
+uint32 manager_get_poll_interval(Manager * manager) {
+  return manager->GetPollInterval();
 }
+
+void manager_set_poll_interval(Manager * manager, uint32 interval, bool between_poll) {
+  manager->SetPollInterval(interval, between_poll);
+}
+
+bool manager_enable_poll_with_intensity(Manager * manager, const ValueID * value, uint8 intensity) {
+  return manager->EnablePoll(*value, intensity);
+}
+
+bool manager_enable_poll(Manager * manager, const ValueID * value) {
+  return manager->EnablePoll(*value);
+}
+
+bool manager_disable_poll(Manager * manager, const ValueID * value) {
+  return manager->DisablePoll(*value);
+}
+
+bool manager_is_polled(Manager * manager, const ValueID * value) {
+  return manager->isPolled(*value);
+}
+
+void manager_set_poll_intensity(Manager * manager, const ValueID * value, uint8 intensity) {
+  manager->SetPollIntensity(*value, intensity);
+}
+
+uint8 manager_get_poll_intensity(Manager * manager, const ValueID * value) {
+  return manager->GetPollIntensity(*value);
+}
+
+} /* extern "C" */

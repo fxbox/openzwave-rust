@@ -8,6 +8,7 @@ extern "C" {
 
 typedef OpenZWave::Manager Manager;
 typedef OpenZWave::Driver Driver;
+typedef OpenZWave::ValueID ValueID;
 
 Manager * manager_create();
 Manager * manager_get();
@@ -27,6 +28,15 @@ char const * manager_get_library_version(Manager * manager, const uint32 home_id
 
 char const * manager_get_library_type_name(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator);
 char const * manager_get_controller_path(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator);
+
+uint32 manager_get_poll_interval(Manager * manager);
+void manager_set_poll_interval(Manager * manager, uint32 interval, bool between_poll);
+bool manager_enable_poll_with_intensity(Manager * manager, const ValueID * value, uint8 intensity);
+bool manager_enable_poll(Manager * manager, const ValueID * value);
+bool manager_disable_poll(Manager * manager, const ValueID * value);
+bool manager_is_polled(Manager * manager, const ValueID * value);
+void manager_set_poll_intensity(Manager * manager, const ValueID * value, uint8 intensity);
+uint8 manager_get_poll_intensity(Manager * manager, const ValueID * value);
 
 #ifdef __cplusplus
 }  // extern "C"

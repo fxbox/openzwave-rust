@@ -2,7 +2,7 @@ use ffi::value_classes::value_id as extern_value_id;
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
 pub struct ValueID {
-    ptr: *const ExternValueID
+    pub ptr: *const ExternValueID
 }
 
 impl ValueID {

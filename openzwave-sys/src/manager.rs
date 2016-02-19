@@ -1,5 +1,6 @@
 use libc::{ c_void, c_char };
 use notification::Notification;
+use value_classes::value_id::ValueID;
 
 pub enum Manager {}
 
@@ -60,4 +61,12 @@ extern {
                                          rust_string_creator: extern fn(*const c_char) -> *const c_char) -> *const c_char;
     pub fn manager_get_controller_path(manager: *mut Manager, home_id: u32,
                                        rust_string_creator: extern fn(*const c_char) -> *const c_char) -> *const c_char;
+    pub fn manager_get_poll_interval(manager: *mut Manager) -> i32;
+    pub fn manager_set_poll_interval(manager: *mut Manager, interval_ms: i32, is_between_each_poll: bool);
+    pub fn manager_enable_poll_with_intensity(manager: *mut Manager, value: *const ValueID, intensity: u8) -> bool;
+    pub fn manager_enable_poll(manager: *mut Manager, value: *const ValueID) -> bool;
+    pub fn manager_disable_poll(manager: *mut Manager, value: *const ValueID) -> bool;
+    pub fn manager_is_polled(manager: *mut Manager, value: *const ValueID) -> bool;
+    pub fn manager_set_poll_intensity(manager: *mut Manager, value: *const ValueID, intensity: u8);
+    pub fn manager_get_poll_intensity(manager: *mut Manager, value: *const ValueID) -> u8;
 }
