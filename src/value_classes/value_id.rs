@@ -1,7 +1,15 @@
 use ffi::value_classes::value_id as extern_value_id;
+use ffi::manager as extern_manager;
+use libc::c_char;
+use std::ffi::CString;
+use std::ptr;
+
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
+use utils::get_string_callback;
+
 pub struct ValueID {
+    // public because it's used in some methods in manager.
     pub ptr: *const ExternValueID
 }
 
@@ -69,6 +77,99 @@ impl ValueID {
 
     pub fn get_id(&self) -> u64 {
         unsafe { extern_value_id::value_id_get_id(self.ptr) }
+    }
+
+    pub fn as_bool(&self) -> Result<bool, &str> {
+        match self.get_type() {
+            // The underlying library returns a value for both bool and button types.
+            ValueType::ValueType_Bool | ValueType::ValueType_Button => {
+                let manager_ptr = unsafe { extern_manager::get() };
+                let mut val: bool = false;
+                let res = unsafe { extern_manager::get_value_as_bool(manager_ptr, self.ptr, &mut val) };
+                if res { Ok(val) } else { Err("Could not get the value") }
+            },
+            _ => Err("Wrong type")
+        }
+    }
+
+    pub fn as_byte(&self) -> Result<u8, &str> {
+        if self.get_type() == ValueType::ValueType_Byte {
+            let manager_ptr = unsafe { extern_manager::get() };
+            let mut val: u8 = 0;
+            let res = unsafe { extern_manager::get_value_as_byte(manager_ptr, self.ptr, &mut val) };
+            if res { Ok(val) } else { Err("Could not get the value") }
+        } else {
+            Err("Wrong type")
+        }
+    }
+
+    pub fn as_float(&self) -> Result<f32, &str> {
+        if self.get_type() == ValueType::ValueType_Decimal {
+            let manager_ptr = unsafe { extern_manager::get() };
+            let mut val: f32 = 0.;
+            let res = unsafe { extern_manager::get_value_as_float(manager_ptr, self.ptr, &mut val) };
+            if res { Ok(val) } else { Err("Could not get the value") }
+        } else {
+            Err("Wrong type")
+        }
+    }
+
+    pub fn as_int(&self) -> Result<i32, &str> {
+        if self.get_type() == ValueType::ValueType_Int {
+            let manager_ptr = unsafe { extern_manager::get() };
+            let mut val: i32 = 0;
+            let res = unsafe { extern_manager::get_value_as_int(manager_ptr, self.ptr, &mut val) };
+            if res { Ok(val) } else { Err("Could not get the value") }
+        } else {
+            Err("Wrong type")
+        }
+    }
+
+    pub fn as_short(&self) -> Result<i16, &str> {
+        if self.get_type() == ValueType::ValueType_Short {
+            let manager_ptr = unsafe { extern_manager::get() };
+            let mut val: i16 = 0;
+            let res = unsafe { extern_manager::get_value_as_short(manager_ptr, self.ptr, &mut val) };
+            if res { Ok(val) } else { Err("Could not get the value") }
+        } else {
+            Err("Wrong type")
+        }
+    }
+
+    pub fn as_string(&self) -> Result<String, &str> {
+        // The underlying C++ lib returns a value for any type.
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut raw_string: *mut c_char = ptr::null_mut();
+
+        let res = unsafe {
+            extern_manager::get_value_as_string(manager_ptr, self.ptr, &mut raw_string, get_string_callback)
+        };
+
+        if res {
+            let val = unsafe { CString::from_raw(raw_string) };
+            Ok(val.into_string().unwrap())
+        } else {
+            Err("Could not get the value")
+        }
+    }
+
+    pub fn as_raw(&self) -> Result<Vec<u8>, &str> {
+        if self.get_type() == ValueType::ValueType_Raw {
+            let mut length: u8 = 0;
+            let mut raw_ptr: *mut u8 = ptr::null_mut();
+
+            let manager_ptr = unsafe { extern_manager::get() };
+            let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, &mut raw_ptr, &mut length) };
+
+            if res {
+                let val = unsafe { Vec::from_raw_parts(raw_ptr, length as usize, length as usize) };
+                Ok(val)
+            } else {
+                Err("Could not get the value")
+            }
+        } else {
+            Err("Wrong type")
+        }
     }
 }
 

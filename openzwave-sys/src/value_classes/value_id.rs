@@ -1,5 +1,5 @@
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ValueGenre {
     ValueGenre_Basic = 0,
     ValueGenre_User,
@@ -9,7 +9,7 @@ pub enum ValueGenre {
 }
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ValueType {
     ValueType_Bool = 0,
     ValueType_Byte,

@@ -108,7 +108,7 @@ c_like_enum! {
 }
 
 pub struct Manager {
-    ptr: *mut extern_manager::Manager,
+    pub ptr: *mut extern_manager::Manager,
     options: Options,
     watchers: Vec<Option<Box<WatcherWrapper>>>
 }

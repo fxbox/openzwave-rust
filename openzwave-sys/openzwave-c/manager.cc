@@ -61,26 +61,26 @@ Driver::ControllerInterface manager_get_controller_interface_type(Manager * mana
   return manager->GetControllerInterfaceType(home_id);
 }
 
-char const * manager_get_library_version(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+char * manager_get_library_version(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
   // We can't just return c_str() because the underlying buffer for "string"
   // would be deallocated after the end of this function. Thats why we have a
   // complex dance with the Rust function stringCreator.
   return stringCreator(manager->GetLibraryVersion(home_id).c_str()); // stringCreator expects a NUL-ended string.
 }
 
-char const * manager_get_library_type_name(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+char * manager_get_library_type_name(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
   return stringCreator(manager->GetLibraryTypeName(home_id).c_str());
 }
 
-char const * manager_get_controller_path(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
+char * manager_get_controller_path(Manager * manager, const uint32 home_id, const RustStringCreator stringCreator) {
   return stringCreator(manager->GetControllerPath(home_id).c_str());
 }
 
-uint32 manager_get_poll_interval(Manager * manager) {
+int32 manager_get_poll_interval(Manager * manager) {
   return manager->GetPollInterval();
 }
 
-void manager_set_poll_interval(Manager * manager, uint32 interval, bool between_poll) {
+void manager_set_poll_interval(Manager * manager, int32 interval, bool between_poll) {
   manager->SetPollInterval(interval, between_poll);
 }
 
@@ -106,6 +106,99 @@ void manager_set_poll_intensity(Manager * manager, const ValueID * value, uint8 
 
 uint8 manager_get_poll_intensity(Manager * manager, const ValueID * value) {
   return manager->GetPollIntensity(*value);
+}
+
+char * manager_get_value_label(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueLabel(*id).c_str());
+}
+
+void manager_set_value_label(Manager * manager, const ValueID * id, char const * str) {
+  const std::string string(str);
+  manager->SetValueLabel(*id, string);
+}
+
+char * manager_get_value_units(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueUnits(*id).c_str());
+}
+
+void manager_set_value_units(Manager * manager, const ValueID * id, char const * str) {
+  const std::string string(str);
+  manager->SetValueUnits(*id, string);
+}
+
+char * manager_get_value_help(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueHelp(*id).c_str());
+}
+
+void manager_set_value_help(Manager * manager, const ValueID * id, char const * str) {
+  const std::string string(str);
+  manager->SetValueHelp(*id, string);
+}
+
+int32 manager_get_value_min(Manager * manager, const ValueID * id) {
+  return manager->GetValueMin(*id);
+}
+
+int32 manager_get_value_max(Manager * manager, const ValueID * id) {
+  return manager->GetValueMax(*id);
+}
+
+bool manager_is_value_read_only(Manager * manager, const ValueID * id) {
+  return manager->IsValueReadOnly(*id);
+}
+
+bool manager_is_value_write_only(Manager * manager, const ValueID * id) {
+  return manager->IsValueWriteOnly(*id);
+}
+
+bool manager_is_value_set(Manager * manager, const ValueID * id) {
+  return manager->IsValueSet(*id);
+}
+
+bool manager_is_value_polled(Manager * manager, const ValueID * id) {
+  return manager->IsValuePolled(*id);
+}
+
+GET_VALUE_FUNC(as_bool, bool* value) {
+  return manager->GetValueAsBool(*id, value);
+}
+
+GET_VALUE_FUNC(as_byte, uint8* value) {
+  return manager->GetValueAsByte(*id, value);
+}
+
+GET_VALUE_FUNC(as_float, float* value) {
+  return manager->GetValueAsFloat(*id, value);
+}
+
+GET_VALUE_FUNC(as_int, int32* value) {
+  return manager->GetValueAsInt(*id, value);
+}
+
+GET_VALUE_FUNC(as_short, int16* value) {
+  return manager->GetValueAsShort(*id, value);
+}
+
+GET_VALUE_FUNC(as_string, char** value, const RustStringCreator stringCreator) {
+  std::string result;
+  bool res =  manager->GetValueAsString(*id, &result);
+  *value = stringCreator(result.c_str());
+  return res;
+}
+
+GET_VALUE_FUNC(as_raw, uint8** value, uint8* length) {
+  return manager->GetValueAsRaw(*id, value, length);
+}
+
+GET_VALUE_FUNC(list_selection_as_string, char** value, const RustStringCreator stringCreator) {
+  std::string result;
+  bool res = manager->GetValueListSelection(*id, &result);
+  *value = stringCreator(result.c_str());
+  return res;
+}
+
+GET_VALUE_FUNC(list_selection_as_int, int32* value) {
+  return manager->GetValueListSelection(*id, value);
 }
 
 } /* extern "C" */
