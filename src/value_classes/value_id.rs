@@ -176,7 +176,7 @@ impl ValueID {
 use std::fmt;
 impl fmt::Debug for ValueID {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ValueID {{ home_id: {:?}, node_id: {:?}, genre: {:?}, command_class_id: {:?}, instance: {:?}, index: {:?}, type: {:?}, id: {:?} }}",
+        write!(f, "ValueID {{ home_id: {:?}, node_id: {:?}, genre: {:?}, command_class_id: {:?}, instance: {:?}, index: {:?}, type: {:?}, id: {:?}, as_bool: {:?}, as_byte: {:?}, as_float: {:?}, as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?} }}",
                self.get_home_id(),
                self.get_node_id(),
                self.get_genre(),
@@ -184,7 +184,14 @@ impl fmt::Debug for ValueID {
                self.get_instance(),
                self.get_index(),
                self.get_type(),
-               self.get_id()
+               self.get_id(),
+               self.as_bool().ok(),
+               self.as_byte().ok(),
+               self.as_float().ok(),
+               self.as_int().ok(),
+               self.as_short().ok(),
+               self.as_string().ok(),
+               self.as_raw().ok()
         )
     }
 }

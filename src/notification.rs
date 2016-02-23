@@ -108,17 +108,18 @@ impl fmt::Display for Notification {
 
 impl fmt::Debug for Notification {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Notification {{ type: {:?}, home_id: {:?}, value_id: {:?}, group_idx: {:?}, event: {:?}, button_id: {:?}, scene_id: {:?}, notification: {:?}, byte: {:?}, as_string: {:?} }}",
+        write!(f, "Notification {{ type: {:?}, home_id: {:?}, group_idx: {:?}, event: {:?}, button_id: {:?}, scene_id: {:?}, notification: {:?}, byte: {:?}, as_string: {:?}, \
+                   value_id: {:?} }}",
                self.get_type(),
                self.get_home_id(),
-               self.get_value_id(),
                self.get_group_idx(),
                self.get_event(),
                self.get_button_id(),
                self.get_scene_id(),
                self.get_notification(),
                self.get_byte(),
-               self.get_as_string()
+               self.get_as_string(),
+               self.get_value_id()
         )
     }
 }
