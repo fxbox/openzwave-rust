@@ -3,10 +3,49 @@ use ffi::manager as extern_manager;
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
+use std::fmt;
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
 use utils::get_string_callback;
+
+pub struct ValueList<'a> {
+    value_id: &'a ValueID
+}
+
+impl<'a> ValueList<'a> {
+    pub fn selection_as_string(&self) -> Result<String, &str> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut raw_string: *mut c_char = ptr::null_mut();
+
+        let res = unsafe {
+            extern_manager::get_value_list_selection_as_string(manager_ptr, self.value_id.ptr, &mut raw_string, get_string_callback)
+        };
+
+        if res {
+            let val = unsafe { CString::from_raw(raw_string) };
+            Ok(val.into_string().unwrap())
+        } else {
+            Err("Could not get the value")
+        }
+    }
+
+    pub fn selection_as_int(&self) -> Result<i32, &str> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut val: i32 = 0;
+        let res = unsafe { extern_manager::get_value_list_selection_as_int(manager_ptr, self.value_id.ptr, &mut val) };
+        if res { Ok(val) } else { Err("Could not get the value") }
+    }
+}
+
+impl<'a> fmt::Debug for ValueList<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ValueList {{ selection_as_string: {:?}, selection_as_int: {:?} }}",
+               self.selection_as_string().ok(),
+               self.selection_as_int().ok()
+        )
+    }
+}
 
 pub struct ValueID {
     // public because it's used in some methods in manager.
@@ -171,12 +210,24 @@ impl ValueID {
             Err("Wrong type")
         }
     }
+
+    pub fn as_list(&self) -> Result<ValueList, &str> {
+        if self.get_type() == ValueType::ValueType_List {
+            Ok(ValueList { value_id: self })
+        } else {
+            Err("Wrong type")
+        }
+    }
+
 }
 
-use std::fmt;
 impl fmt::Debug for ValueID {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ValueID {{ home_id: {:?}, node_id: {:?}, genre: {:?}, command_class_id: {:?}, instance: {:?}, index: {:?}, type: {:?}, id: {:?}, as_bool: {:?}, as_byte: {:?}, as_float: {:?}, as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?} }}",
+        write!(f, "ValueID {{ home_id: {:?}, node_id: {:?}, genre: {:?}, command_class_id: {:?}, \
+                   instance: {:?}, index: {:?}, type: {:?}, id: {:?}, as_bool: {:?}, as_byte: {:?}, \
+                   as_float: {:?}, as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?}, \
+                   list: {:?}
+                   }}",
                self.get_home_id(),
                self.get_node_id(),
                self.get_genre(),
@@ -191,7 +242,8 @@ impl fmt::Debug for ValueID {
                self.as_int().ok(),
                self.as_short().ok(),
                self.as_string().ok(),
-               self.as_raw().ok()
+               self.as_raw().ok(),
+               self.as_list().ok(),
         )
     }
 }
