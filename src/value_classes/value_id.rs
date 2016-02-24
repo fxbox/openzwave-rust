@@ -1,7 +1,7 @@
 use ffi::value_classes::value_id as extern_value_id;
 use ffi::manager as extern_manager;
 use libc::c_char;
-use std::ffi::CString;
+use std::ffi::{ CString, NulError };
 use std::ptr;
 use std::fmt;
 
@@ -219,14 +219,106 @@ impl ValueID {
         }
     }
 
+    pub fn get_label(&self) -> String {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            CString::from_raw(extern_manager::get_value_label(manager_ptr, self.ptr, get_string_callback))
+        }.into_string().unwrap()
+    }
+
+    pub fn set_label(&self, str: &str) -> Result<(), NulError> {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            let c_string = try!(CString::new(str)).as_ptr();
+            extern_manager::set_value_label(manager_ptr, self.ptr, c_string);
+            Ok(())
+        }
+    }
+
+    pub fn get_units(&self) -> String {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            CString::from_raw(extern_manager::get_value_units(manager_ptr, self.ptr, get_string_callback))
+        }.into_string().unwrap()
+    }
+
+    pub fn set_units(&self, str: &str) -> Result<(), NulError>  {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            let c_string = try!(CString::new(str)).as_ptr();
+            extern_manager::set_value_units(manager_ptr, self.ptr, c_string);
+            Ok(())
+        }
+    }
+
+    pub fn get_help(&self) -> String {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            CString::from_raw(extern_manager::get_value_help(manager_ptr, self.ptr, get_string_callback))
+        }.into_string().unwrap()
+    }
+
+    pub fn set_help(&self, str: &str) -> Result<(), NulError> {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            let c_string = try!(CString::new(str)).as_ptr();
+            extern_manager::set_value_help(manager_ptr, self.ptr, c_string);
+            Ok(())
+        }
+    }
+
+    pub fn get_min(&self) -> i32 {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::get_value_min(manager_ptr, self.ptr)
+        }
+    }
+
+    pub fn get_max(&self) -> i32 {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::get_value_max(manager_ptr, self.ptr)
+        }
+    }
+
+    pub fn is_read_only(&self) -> bool {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::is_value_read_only(manager_ptr, self.ptr)
+        }
+    }
+
+    pub fn is_write_only(&self) -> bool {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::is_value_write_only(manager_ptr, self.ptr)
+        }
+    }
+
+    pub fn is_set(&self) -> bool {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::is_value_set(manager_ptr, self.ptr)
+        }
+    }
+
+    pub fn is_polled(&self) -> bool {
+        unsafe {
+            let manager_ptr = extern_manager::get();
+            extern_manager::is_value_polled(manager_ptr, self.ptr)
+        }
+    }
 }
 
 impl fmt::Debug for ValueID {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "ValueID {{ home_id: {:?}, node_id: {:?}, genre: {:?}, command_class_id: {:?}, \
-                   instance: {:?}, index: {:?}, type: {:?}, id: {:?}, as_bool: {:?}, as_byte: {:?}, \
+                   instance: {:?}, index: {:?}, type: {:?}, id: {:?}, \
+                   label: {:?}, units: {:?}, help: {:?}, min: {:?}, max: {:?}, is_read_only: {:?}, \
+                   is_write_only: {:?}, is_set: {:?}, is_polled: {:?}, \
+                   as_bool: {:?}, as_byte: {:?}, \
                    as_float: {:?}, as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?}, \
-                   list: {:?}
+                   list: {:?} \
                    }}",
                self.get_home_id(),
                self.get_node_id(),
@@ -236,6 +328,15 @@ impl fmt::Debug for ValueID {
                self.get_index(),
                self.get_type(),
                self.get_id(),
+               self.get_label(),
+               self.get_units(),
+               self.get_help(),
+               self.get_min(),
+               self.get_max(),
+               self.is_read_only(),
+               self.is_write_only(),
+               self.is_set(),
+               self.is_polled(),
                self.as_bool().ok(),
                self.as_byte().ok(),
                self.as_float().ok(),

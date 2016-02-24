@@ -45,6 +45,8 @@ pub use self::{
     manager_set_value_units as set_value_units,
     manager_get_value_help as get_value_help,
     manager_set_value_help as set_value_help,
+    manager_get_value_min as get_value_min,
+    manager_get_value_max as get_value_max,
     manager_is_value_read_only as is_value_read_only,
     manager_is_value_write_only as is_value_write_only,
     manager_is_value_set as is_value_set,
