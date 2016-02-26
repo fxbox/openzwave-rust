@@ -1,6 +1,6 @@
 use ffi::manager;
 use libc::c_char;
-use utils::get_string_callback;
+use ffi::utils::rust_string_creator;
 use std::ffi::CString;
 
 pub struct Controller {
@@ -23,7 +23,7 @@ macro_rules! network_impl_string {
         $(
             pub fn $name(&self) -> String {
                 unsafe {
-                    CString::from_raw(manager::$name(self.ptr, self.home_id, get_string_callback) as *mut c_char)
+                    CString::from_raw(manager::$name(self.ptr, self.home_id, rust_string_creator) as *mut c_char)
                 }.into_string().unwrap()
             }
          )*

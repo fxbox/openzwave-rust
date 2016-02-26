@@ -1,4 +1,4 @@
-use utils::res_to_result;
+use ffi::utils::res_to_result;
 use libc::c_void;
 use std::ffi::CString;
 use notification::{Notification, ExternNotification};

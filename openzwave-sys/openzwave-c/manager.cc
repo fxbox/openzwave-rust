@@ -182,23 +182,51 @@ GET_VALUE_FUNC(as_short, int16* value) {
 GET_VALUE_FUNC(as_string, char** value, const RustStringCreator stringCreator) {
   std::string result;
   bool res =  manager->GetValueAsString(*id, &result);
-  *value = stringCreator(result.c_str());
+  if (res) {
+    *value = stringCreator(result.c_str());
+  }
   return res;
 }
 
-GET_VALUE_FUNC(as_raw, uint8** value, uint8* length) {
-  return manager->GetValueAsRaw(*id, value, length);
+GET_VALUE_FUNC(as_raw, void ** rust_value, const RustU8VecCreator vecCreator) {
+  uint8* value;
+  uint8 length; // strangely GetValueAsRaw wants uint8
+  bool res = manager->GetValueAsRaw(*id, &value, &length);
+  if (res) {
+    *rust_value = vecCreator(value, length);
+  }
+  return res;
 }
 
 GET_VALUE_FUNC(list_selection_as_string, char** value, const RustStringCreator stringCreator) {
   std::string result;
   bool res = manager->GetValueListSelection(*id, &result);
-  *value = stringCreator(result.c_str());
+  if (res) {
+    *value = stringCreator(result.c_str());
+  }
   return res;
 }
 
 GET_VALUE_FUNC(list_selection_as_int, int32* value) {
   return manager->GetValueListSelection(*id, value);
+}
+
+GET_VALUE_FUNC(list_items, void ** rust_value, const RustStringVecCreator vecCreator) {
+  std::vector<std::string> vec;
+
+  bool res = manager->GetValueListItems(*id, &vec);
+
+  if (res) {
+    size_t length = vec.size();
+    char const ** value = new const char*[length];
+    size_t count = 0;
+    for (const std::string &str : vec) {
+      value[count++] = str.c_str();
+    }
+    *rust_value = vecCreator(value, length);
+  }
+
+  return res;
 }
 
 } /* extern "C" */

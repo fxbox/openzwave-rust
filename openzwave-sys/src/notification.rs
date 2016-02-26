@@ -1,5 +1,6 @@
 use value_classes::value_id::ValueID;
 use libc::c_char;
+use utils::RustStringCreator;
 
 #[derive(Debug)]
 #[repr(C)]
@@ -60,7 +61,6 @@ extern {
     pub fn notification_get_scene_id(notification: *const Notification) -> u8;
     pub fn notification_get_notification(notification: *const Notification) -> u8;
     pub fn notification_get_byte(notification: *const Notification) -> u8;
-    pub fn notification_get_as_string(notification: *const Notification,
-                                      rust_string_creator: extern fn(*const c_char) -> *const c_char) -> *const c_char;
+    pub fn notification_get_as_string(notification: *const Notification, rust_string_creator: RustStringCreator) -> *const c_char;
 }
 

@@ -1,6 +1,6 @@
 use ffi::options as extern_options;
 use std::ffi::CString;
-use utils::res_to_result;
+use ffi::utils::res_to_result;
 
 pub struct Options {
     ptr: *mut extern_options::Options

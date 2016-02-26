@@ -60,9 +60,10 @@ GET_VALUE_FUNC(as_float, float*);
 GET_VALUE_FUNC(as_int, int32*);
 GET_VALUE_FUNC(as_short, int16*);
 GET_VALUE_FUNC(as_string, char**, const RustStringCreator);
-GET_VALUE_FUNC(as_raw, uint8** value, uint8* length);
+GET_VALUE_FUNC(as_raw, void ** value, RustU8VecCreator);
 GET_VALUE_FUNC(list_selection_as_string, char**, const RustStringCreator);
 GET_VALUE_FUNC(list_selection_as_int, int32*);
+GET_VALUE_FUNC(list_items, void ** value, const RustStringVecCreator);
 
 #ifdef __cplusplus
 }  // extern "C"

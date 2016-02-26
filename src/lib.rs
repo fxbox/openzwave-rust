@@ -1,7 +1,7 @@
 extern crate libc;
+#[macro_use]
 extern crate openzwave_sys as ffi;
 
-pub mod utils;
 pub mod manager;
 pub mod options;
 pub mod notification;

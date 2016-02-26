@@ -1,5 +1,6 @@
 extern crate libc;
 
+pub mod utils;
 pub mod manager;
 pub mod options;
 pub mod notification;

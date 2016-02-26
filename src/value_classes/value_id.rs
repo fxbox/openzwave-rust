@@ -1,13 +1,13 @@
 use ffi::value_classes::value_id as extern_value_id;
 use ffi::manager as extern_manager;
-use libc::c_char;
+use libc::{ c_char, c_void };
 use std::ffi::{ CString, NulError };
 use std::ptr;
 use std::fmt;
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
-use utils::get_string_callback;
+use ffi::utils::{ rust_string_creator, rust_u8_vec_creator, rust_string_vec_creator };
 
 pub struct ValueList<'a> {
     value_id: &'a ValueID
@@ -19,7 +19,7 @@ impl<'a> ValueList<'a> {
         let mut raw_string: *mut c_char = ptr::null_mut();
 
         let res = unsafe {
-            extern_manager::get_value_list_selection_as_string(manager_ptr, self.value_id.ptr, &mut raw_string, get_string_callback)
+            extern_manager::get_value_list_selection_as_string(manager_ptr, self.value_id.ptr, &mut raw_string, rust_string_creator)
         };
 
         if res {
@@ -36,13 +36,30 @@ impl<'a> ValueList<'a> {
         let res = unsafe { extern_manager::get_value_list_selection_as_int(manager_ptr, self.value_id.ptr, &mut val) };
         if res { Ok(val) } else { Err("Could not get the value") }
     }
+
+    pub fn items(&self) -> Result<Vec<String>, &str> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut c_items: *mut Vec<*mut c_char> = ptr::null_mut();
+        let c_items_void_ptr = &mut c_items as *mut *mut _ as *mut *mut c_void;
+        let res = unsafe { extern_manager::get_value_list_items(manager_ptr, self.value_id.ptr, c_items_void_ptr, rust_string_vec_creator) };
+        if res {
+            let vec_c_items = unsafe { Box::from_raw(c_items) };
+            let result = vec_c_items.iter().map(
+                |&item| unsafe { CString::from_raw(item) }.into_string().unwrap()
+            ).collect();
+            Ok(result)
+        } else {
+            Err("Could not get the value")
+        }
+    }
 }
 
 impl<'a> fmt::Debug for ValueList<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ValueList {{ selection_as_string: {:?}, selection_as_int: {:?} }}",
+        write!(f, "ValueList {{ selection_as_string: {:?}, selection_as_int: {:?}, items: {:?} }}",
                self.selection_as_string().ok(),
-               self.selection_as_int().ok()
+               self.selection_as_int().ok(),
+               self.items().ok()
         )
     }
 }
@@ -181,7 +198,7 @@ impl ValueID {
         let mut raw_string: *mut c_char = ptr::null_mut();
 
         let res = unsafe {
-            extern_manager::get_value_as_string(manager_ptr, self.ptr, &mut raw_string, get_string_callback)
+            extern_manager::get_value_as_string(manager_ptr, self.ptr, &mut raw_string, rust_string_creator)
         };
 
         if res {
@@ -192,16 +209,16 @@ impl ValueID {
         }
     }
 
-    pub fn as_raw(&self) -> Result<Vec<u8>, &str> {
+    pub fn as_raw(&self) -> Result<Box<Vec<u8>>, &str> {
         if self.get_type() == ValueType::ValueType_Raw {
-            let mut length: u8 = 0;
-            let mut raw_ptr: *mut u8 = ptr::null_mut();
+            let mut raw_ptr: *mut Vec<u8> = ptr::null_mut();
+            let raw_ptr_c_void = &mut raw_ptr as *mut *mut _ as *mut *mut c_void;
 
             let manager_ptr = unsafe { extern_manager::get() };
-            let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, &mut raw_ptr, &mut length) };
+            let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, raw_ptr_c_void, rust_u8_vec_creator) };
 
             if res {
-                let val = unsafe { Vec::from_raw_parts(raw_ptr, length as usize, length as usize) };
+                let val = unsafe { Box::from_raw(raw_ptr) };
                 Ok(val)
             } else {
                 Err("Could not get the value")
@@ -222,7 +239,7 @@ impl ValueID {
     pub fn get_label(&self) -> String {
         unsafe {
             let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_label(manager_ptr, self.ptr, get_string_callback))
+            CString::from_raw(extern_manager::get_value_label(manager_ptr, self.ptr, rust_string_creator))
         }.into_string().unwrap()
     }
 
@@ -238,7 +255,7 @@ impl ValueID {
     pub fn get_units(&self) -> String {
         unsafe {
             let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_units(manager_ptr, self.ptr, get_string_callback))
+            CString::from_raw(extern_manager::get_value_units(manager_ptr, self.ptr, rust_string_creator))
         }.into_string().unwrap()
     }
 
@@ -254,7 +271,7 @@ impl ValueID {
     pub fn get_help(&self) -> String {
         unsafe {
             let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_help(manager_ptr, self.ptr, get_string_callback))
+            CString::from_raw(extern_manager::get_value_help(manager_ptr, self.ptr, rust_string_creator))
         }.into_string().unwrap()
     }
 
@@ -344,7 +361,7 @@ impl fmt::Debug for ValueID {
                self.as_short().ok(),
                self.as_string().ok(),
                self.as_raw().ok(),
-               self.as_list().ok(),
+               self.as_list().ok()
         )
     }
 }
