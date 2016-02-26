@@ -64,6 +64,7 @@ GET_VALUE_FUNC(as_raw, void ** value, RustU8VecCreator);
 GET_VALUE_FUNC(list_selection_as_string, char**, const RustStringCreator);
 GET_VALUE_FUNC(list_selection_as_int, int32*);
 GET_VALUE_FUNC(list_items, void ** value, const RustStringVecCreator);
+GET_VALUE_FUNC(list_values, void ** value, const RustI32VecCreator);
 
 #ifdef __cplusplus
 }  // extern "C"

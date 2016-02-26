@@ -1,7 +1,7 @@
 use libc::{ c_void, c_char, c_float };
 use notification::Notification;
 use value_classes::value_id::ValueID;
-use utils::{ RustStringCreator, RustU8VecCreator, RustStringVecCreator };
+use utils::{ RustStringCreator, RustVecCreator };
 
 pub enum Manager {}
 
@@ -60,7 +60,8 @@ pub use self::{
     manager_get_value_as_raw as get_value_as_raw,
     manager_get_value_list_selection_as_string as get_value_list_selection_as_string,
     manager_get_value_list_selection_as_int as get_value_list_selection_as_int,
-    manager_get_value_list_items as get_value_list_items
+    manager_get_value_list_items as get_value_list_items,
+    manager_get_value_list_values as get_value_list_values
 };
 
 extern {
@@ -117,8 +118,9 @@ extern {
     pub fn manager_get_value_as_int(manager: *mut Manager, id: *const ValueID, result: *mut i32) -> bool;
     pub fn manager_get_value_as_short(manager: *mut Manager, id: *const ValueID, result: *mut i16) -> bool;
     pub fn manager_get_value_as_string(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_char, stringCreator: RustStringCreator) -> bool;
-    pub fn manager_get_value_as_raw(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustU8VecCreator) -> bool;
+    pub fn manager_get_value_as_raw(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<u8>) -> bool;
     pub fn manager_get_value_list_selection_as_string(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_char, stringCreator: RustStringCreator) -> bool;
     pub fn manager_get_value_list_selection_as_int(manager: *mut Manager, id: *const ValueID, result: *mut i32) -> bool;
-    pub fn manager_get_value_list_items(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustStringVecCreator) -> bool;
+    pub fn manager_get_value_list_items(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<*const c_char>) -> bool;
+    pub fn manager_get_value_list_values(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<i32>) -> bool;
 }

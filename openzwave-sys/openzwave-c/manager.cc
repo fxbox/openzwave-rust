@@ -229,4 +229,13 @@ GET_VALUE_FUNC(list_items, void ** rust_value, const RustStringVecCreator vecCre
   return res;
 }
 
+GET_VALUE_FUNC(list_values, void ** rust_value, const RustI32VecCreator vecCreator) {
+  std::vector<int32> vec;
+  bool res = manager->GetValueListValues(*id, &vec);
+  if (res) {
+    *rust_value = vecCreator(vec.data(), vec.size());
+  }
+  return res;
+}
+
 } /* extern "C" */

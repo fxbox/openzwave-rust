@@ -7,7 +7,7 @@ use std::fmt;
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
-use ffi::utils::{ rust_string_creator, rust_u8_vec_creator, rust_string_vec_creator };
+use ffi::utils::{ rust_string_creator, rust_vec_creator, rust_string_vec_creator };
 
 pub struct ValueList<'a> {
     value_id: &'a ValueID
@@ -52,14 +52,28 @@ impl<'a> ValueList<'a> {
             Err("Could not get the value")
         }
     }
+
+    pub fn values(&self) -> Result<Box<Vec<i32>>, &str> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut c_values: *mut Vec<i32> = ptr::null_mut();
+        let c_values_void_ptr = &mut c_values as *mut *mut _ as *mut *mut c_void;
+        let res = unsafe { extern_manager::get_value_list_values(manager_ptr, self.value_id.ptr, c_values_void_ptr, rust_vec_creator::<i32>) };
+        if res {
+            let vec_c_values = unsafe { Box::from_raw(c_values) };
+            Ok(vec_c_values)
+        } else {
+            Err("Could not get the value")
+        }
+    }
 }
 
 impl<'a> fmt::Debug for ValueList<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ValueList {{ selection_as_string: {:?}, selection_as_int: {:?}, items: {:?} }}",
+        write!(f, "ValueList {{ selection_as_string: {:?}, selection_as_int: {:?}, items: {:?}, values: {:?} }}",
                self.selection_as_string().ok(),
                self.selection_as_int().ok(),
-               self.items().ok()
+               self.items().ok(),
+               self.values().ok()
         )
     }
 }
@@ -215,7 +229,7 @@ impl ValueID {
             let raw_ptr_c_void = &mut raw_ptr as *mut *mut _ as *mut *mut c_void;
 
             let manager_ptr = unsafe { extern_manager::get() };
-            let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, raw_ptr_c_void, rust_u8_vec_creator) };
+            let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, raw_ptr_c_void, rust_vec_creator::<u8>) };
 
             if res {
                 let val = unsafe { Box::from_raw(raw_ptr) };
