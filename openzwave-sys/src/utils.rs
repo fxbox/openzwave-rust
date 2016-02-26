@@ -34,10 +34,12 @@ pub extern "C" fn rust_vec_creator<T: Clone>(data: *const T, length: usize) -> *
 
 pub extern "C" fn rust_string_vec_creator(data: *const *const c_char, length: usize) -> *mut c_void {
     let rust_data = unsafe { slice::from_raw_parts(data, length) };
-    let mut vec = Box::new(Vec::with_capacity(length));
+    let mut vec: Box<Vec<String>> = Box::new(Vec::with_capacity(length));
     for item in rust_data {
-        let c_string = rust_string_creator(*item);
-        vec.push(c_string);
+        let c_str = unsafe { CStr::from_ptr(*item) };
+        let lossy_str = c_str.to_string_lossy();
+        let own_str = lossy_str.into_owned();
+        vec.push(own_str);
     }
     Box::into_raw(vec) as *mut c_void
 }

@@ -37,17 +37,14 @@ impl<'a> ValueList<'a> {
         if res { Ok(val) } else { Err("Could not get the value") }
     }
 
-    pub fn items(&self) -> Result<Vec<String>, &str> {
+    pub fn items(&self) -> Result<Box<Vec<String>>, &str> {
         let manager_ptr = unsafe { extern_manager::get() };
-        let mut c_items: *mut Vec<*mut c_char> = ptr::null_mut();
+        let mut c_items: *mut Vec<String> = ptr::null_mut();
         let c_items_void_ptr = &mut c_items as *mut *mut _ as *mut *mut c_void;
         let res = unsafe { extern_manager::get_value_list_items(manager_ptr, self.value_id.ptr, c_items_void_ptr, rust_string_vec_creator) };
         if res {
             let vec_c_items = unsafe { Box::from_raw(c_items) };
-            let result = vec_c_items.iter().map(
-                |&item| unsafe { CString::from_raw(item) }.into_string().unwrap()
-            ).collect();
-            Ok(result)
+            Ok(vec_c_items)
         } else {
             Err("Could not get the value")
         }
