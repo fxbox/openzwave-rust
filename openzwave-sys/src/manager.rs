@@ -54,6 +54,7 @@ pub use self::{
     manager_get_value_as_bool as get_value_as_bool,
     manager_get_value_as_byte as get_value_as_byte,
     manager_get_value_as_float as get_value_as_float,
+    manager_get_value_float_precision as get_value_float_precision,
     manager_get_value_as_int as get_value_as_int,
     manager_get_value_as_short as get_value_as_short,
     manager_get_value_as_string as get_value_as_string,
@@ -115,6 +116,7 @@ extern {
     pub fn manager_get_value_as_bool(manager: *mut Manager, id: *const ValueID, result: *mut bool) -> bool;
     pub fn manager_get_value_as_byte(manager: *mut Manager, id: *const ValueID, result: *mut u8) -> bool;
     pub fn manager_get_value_as_float(manager: *mut Manager, id: *const ValueID, result: *mut c_float) -> bool;
+    pub fn manager_get_value_float_precision(manager: *mut Manager, id: *const ValueID, result: *mut u8) -> bool;
     pub fn manager_get_value_as_int(manager: *mut Manager, id: *const ValueID, result: *mut i32) -> bool;
     pub fn manager_get_value_as_short(manager: *mut Manager, id: *const ValueID, result: *mut i16) -> bool;
     pub fn manager_get_value_as_string(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_char, stringCreator: RustStringCreator) -> bool;

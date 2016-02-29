@@ -57,6 +57,7 @@ bool manager_is_value_polled(Manager * manager, const ValueID * id);
 GET_VALUE_FUNC(as_bool, bool*);
 GET_VALUE_FUNC(as_byte, uint8*);
 GET_VALUE_FUNC(as_float, float*);
+GET_VALUE_FUNC(float_precision, uint8*);
 GET_VALUE_FUNC(as_int, int32*);
 GET_VALUE_FUNC(as_short, int16*);
 GET_VALUE_FUNC(as_string, char**, const RustStringCreator);

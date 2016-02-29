@@ -171,6 +171,10 @@ GET_VALUE_FUNC(as_float, float* value) {
   return manager->GetValueAsFloat(*id, value);
 }
 
+GET_VALUE_FUNC(float_precision, uint8* value) {
+  return manager->GetValueFloatPrecision(*id, value);
+}
+
 GET_VALUE_FUNC(as_int, int32* value) {
   return manager->GetValueAsInt(*id, value);
 }

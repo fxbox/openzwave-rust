@@ -181,6 +181,17 @@ impl ValueID {
         }
     }
 
+    pub fn get_float_precision(&self) -> Result<u8, &str> {
+        if self.get_type() == ValueType::ValueType_Decimal {
+            let manager_ptr = unsafe { extern_manager::get() };
+            let mut val: u8 = 0;
+            let res = unsafe { extern_manager::get_value_float_precision(manager_ptr, self.ptr, &mut val) };
+            if res { Ok(val) } else { Err("Could not get the value") }
+        } else {
+            Err("Wrong type")
+        }
+    }
+
     pub fn as_int(&self) -> Result<i32, &str> {
         if self.get_type() == ValueType::ValueType_Int {
             let manager_ptr = unsafe { extern_manager::get() };
@@ -345,7 +356,7 @@ impl fmt::Debug for ValueID {
                    label: {:?}, units: {:?}, help: {:?}, min: {:?}, max: {:?}, is_read_only: {:?}, \
                    is_write_only: {:?}, is_set: {:?}, is_polled: {:?}, \
                    as_bool: {:?}, as_byte: {:?}, \
-                   as_float: {:?}, as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?}, \
+                   as_float: {:?} (precision: {:?}), as_int: {:?}, as_short: {:?}, as_string: {:?}, as_raw: {:?}, \
                    list: {:?} \
                    }}",
                self.get_home_id(),
@@ -368,6 +379,7 @@ impl fmt::Debug for ValueID {
                self.as_bool().ok(),
                self.as_byte().ok(),
                self.as_float().ok(),
+               self.get_float_precision().ok(),
                self.as_int().ok(),
                self.as_short().ok(),
                self.as_string().ok(),
