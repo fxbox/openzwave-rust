@@ -70,7 +70,7 @@ impl Notification {
     pub fn get_notification(&self) -> Option<NotificationCode> {
         let result = match self.get_type() {
             NotificationType::Type_Notification | NotificationType::Type_ControllerCommand =>
-                Some(unsafe { extern_notification:: notification_get_notification(self.ptr) }),
+                Some(unsafe { extern_notification::notification_get_notification(self.ptr) }),
             _ => None
         };
 
