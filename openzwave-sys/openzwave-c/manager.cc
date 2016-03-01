@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 #include "manager.h"
 
 extern "C" {
@@ -222,12 +223,12 @@ GET_VALUE_FUNC(list_items, void ** rust_value, const RustStringVecCreator vecCre
 
   if (res) {
     size_t length = vec.size();
-    char const ** value = new const char*[length];
+    const std::unique_ptr<const char* []> value(new const char*[length]);
     size_t count = 0;
     for (const std::string &str : vec) {
       value[count++] = str.c_str();
     }
-    *rust_value = vecCreator(value, length);
+    *rust_value = vecCreator(value.get(), length);
   }
 
   return res;
