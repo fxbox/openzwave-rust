@@ -51,8 +51,8 @@ bool manager_is_value_write_only(Manager * manager, const ValueID * id);
 bool manager_is_value_set(Manager * manager, const ValueID * id);
 bool manager_is_value_polled(Manager * manager, const ValueID * id);
 
-#define GET_VALUE_FUNC(name, type...) \
-  bool manager_get_value_ ## name (Manager * manager, const ValueID * id, type)
+#define GET_VALUE_FUNC(name, ...) \
+  bool manager_get_value_ ## name (Manager * manager, const ValueID * id, __VA_ARGS__)
 
 GET_VALUE_FUNC(as_bool, bool*);
 GET_VALUE_FUNC(as_byte, uint8*);
@@ -66,6 +66,27 @@ GET_VALUE_FUNC(list_selection_as_string, char**, const RustStringCreator);
 GET_VALUE_FUNC(list_selection_as_int, int32*);
 GET_VALUE_FUNC(list_items, void ** value, const RustStringVecCreator);
 GET_VALUE_FUNC(list_values, void ** value, const RustI32VecCreator);
+
+#define GET_NODE_FUNC(name, return_type, ...) \
+  return_type manager_node_ ## name (Manager * manager, uint32 const home_id, uint8 const node_id, ##__VA_ARGS__)
+
+GET_NODE_FUNC(is_listening_device, bool);
+GET_NODE_FUNC(is_frequent_listening_device, bool);
+GET_NODE_FUNC(is_beaming_device, bool);
+GET_NODE_FUNC(is_routing_device, bool);
+GET_NODE_FUNC(is_security_device, bool);
+GET_NODE_FUNC(get_max_baud_rate, uint32);
+GET_NODE_FUNC(get_version, uint8);
+GET_NODE_FUNC(get_security, uint8);
+GET_NODE_FUNC(is_zwave_plus, bool);
+GET_NODE_FUNC(get_basic, uint8);
+GET_NODE_FUNC(get_generic, uint8);
+GET_NODE_FUNC(get_specific, uint8);
+
+#define GET_NODE_STRING_FUNC(name) \
+  GET_NODE_FUNC(name, char *, const RustStringCreator stringCreator)
+
+GET_NODE_STRING_FUNC(get_manufacturer_name);
 
 #ifdef __cplusplus
 }  // extern "C"

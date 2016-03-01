@@ -242,4 +242,29 @@ GET_VALUE_FUNC(list_values, void ** rust_value, const RustI32VecCreator vecCreat
   return res;
 }
 
+#define GET_NODE_FUNC_IMPL(name, name_impl, type) \
+  GET_NODE_FUNC(name, type) { \
+    return manager->name_impl(home_id, node_id); \
+  }
+
+GET_NODE_FUNC_IMPL(is_listening_device, IsNodeListeningDevice, bool)
+GET_NODE_FUNC_IMPL(is_frequent_listening_device, IsNodeFrequentListeningDevice, bool)
+GET_NODE_FUNC_IMPL(is_beaming_device, IsNodeBeamingDevice, bool)
+GET_NODE_FUNC_IMPL(is_routing_device, IsNodeRoutingDevice, bool)
+GET_NODE_FUNC_IMPL(is_security_device, IsNodeSecurityDevice, bool)
+GET_NODE_FUNC_IMPL(get_max_baud_rate, GetNodeMaxBaudRate, uint32)
+GET_NODE_FUNC_IMPL(get_version, GetNodeVersion, uint8)
+GET_NODE_FUNC_IMPL(get_security, GetNodeSecurity, uint8)
+GET_NODE_FUNC_IMPL(is_zwave_plus, IsNodeZWavePlus, bool)
+GET_NODE_FUNC_IMPL(get_basic, GetNodeBasic, uint8)
+GET_NODE_FUNC_IMPL(get_generic, GetNodeGeneric, uint8)
+GET_NODE_FUNC_IMPL(get_specific, GetNodeSpecific, uint8)
+
+#define GET_NODE_STRING_FUNC_IMPL(name, name_impl) \
+  GET_NODE_STRING_FUNC(name) { \
+    return stringCreator(manager->name_impl(home_id, node_id).c_str()); \
+  }
+
+GET_NODE_STRING_FUNC_IMPL(get_manufacturer_name, GetNodeManufacturerName)
+
 } /* extern "C" */

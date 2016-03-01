@@ -4,6 +4,7 @@ use value_classes::value_id::ValueID;
 use std::ffi::CString;
 use libc::c_char;
 use ffi::utils::rust_string_creator;
+use node::Node;
 
 pub struct Notification {
     ptr: *const ExternNotification
@@ -28,6 +29,10 @@ impl Notification {
 
     pub fn get_node_id(&self) -> u8 {
         unsafe { extern_notification::notification_get_node_id(self.ptr) }
+    }
+
+    pub fn get_node(&self) -> Node {
+        Node::from_id(self.get_home_id(), self.get_node_id())
     }
 
     pub fn get_value_id(&self) -> ValueID {

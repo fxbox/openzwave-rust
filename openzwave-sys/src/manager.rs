@@ -62,7 +62,20 @@ pub use self::{
     manager_get_value_list_selection_as_string as get_value_list_selection_as_string,
     manager_get_value_list_selection_as_int as get_value_list_selection_as_int,
     manager_get_value_list_items as get_value_list_items,
-    manager_get_value_list_values as get_value_list_values
+    manager_get_value_list_values as get_value_list_values,
+    manager_node_is_listening_device as is_node_listening_device,
+    manager_node_is_frequent_listening_device as is_node_frequent_listening_device,
+    manager_node_is_beaming_device as is_node_beaming_device,
+    manager_node_is_routing_device as is_node_routing_device,
+    manager_node_is_security_device as is_node_security_device,
+    manager_node_get_max_baud_rate as get_node_max_baud_rate,
+    manager_node_get_version as get_node_version,
+    manager_node_get_security as get_node_security,
+    manager_node_is_zwave_plus as is_node_zwave_plus,
+    manager_node_get_basic as get_node_basic,
+    manager_node_get_generic as get_node_generic,
+    manager_node_get_specific as get_node_specific,
+    manager_node_get_manufacturer_name as get_node_manufacturer_name
 };
 
 extern {
@@ -125,4 +138,19 @@ extern {
     pub fn manager_get_value_list_selection_as_int(manager: *mut Manager, id: *const ValueID, result: *mut i32) -> bool;
     pub fn manager_get_value_list_items(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<*const c_char>) -> bool;
     pub fn manager_get_value_list_values(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<i32>) -> bool;
+
+    pub fn manager_node_is_listening_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_frequent_listening_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_beaming_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_routing_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_security_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_get_max_baud_rate(manager: *mut Manager, home_id: u32, node_id: u8) -> u32;
+    pub fn manager_node_get_version(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+    pub fn manager_node_get_security(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+    pub fn manager_node_is_zwave_plus(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_get_basic(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+    pub fn manager_node_get_generic(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+    pub fn manager_node_get_specific(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+    pub fn manager_node_get_manufacturer_name(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
 }
+
