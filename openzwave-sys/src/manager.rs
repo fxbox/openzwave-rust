@@ -75,7 +75,19 @@ pub use self::{
     manager_node_get_basic as get_node_basic,
     manager_node_get_generic as get_node_generic,
     manager_node_get_specific as get_node_specific,
-    manager_node_get_manufacturer_name as get_node_manufacturer_name
+
+    manager_node_get_type as get_node_type,
+    manager_node_get_manufacturer_name as get_node_manufacturer_name,
+    manager_node_get_product_name as get_node_product_name,
+    manager_node_get_name as get_node_name,
+    manager_node_get_location as get_node_location,
+    manager_node_get_manufacturer_id as get_node_manufacturer_id,
+    manager_node_get_product_type as get_node_product_type,
+    manager_node_get_product_id as get_node_product_id,
+    manager_node_get_query_stage as get_node_query_stage,
+    manager_node_get_device_type_string as get_node_device_type_string,
+    manager_node_get_role_string as get_node_role_string,
+    manager_node_get_plus_type_string as get_node_plus_type_string,
 };
 
 extern {
@@ -151,6 +163,18 @@ extern {
     pub fn manager_node_get_basic(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
     pub fn manager_node_get_generic(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
     pub fn manager_node_get_specific(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
+
+    pub fn manager_node_get_type(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
     pub fn manager_node_get_manufacturer_name(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_product_name(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_name(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_location(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_manufacturer_id(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_product_type(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_product_id(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_query_stage(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_device_type_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_role_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_plus_type_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
 }
 

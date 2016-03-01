@@ -11,7 +11,7 @@ pub struct Node {
 
 // implements simple node getters
 macro_rules! node_getters {
-    ( $($name: ident, $impl_name: ident -> $t: ty;)+ ) => {
+    ( $($impl_name: ident as $name: ident -> $t: ty),+ ) => {
         $(pub fn $name(&self) -> $t {
             let manager_ptr = unsafe { extern_manager::get() };
             unsafe {
@@ -22,7 +22,7 @@ macro_rules! node_getters {
 }
 
 macro_rules! node_string_getters {
-    ( $($name: ident, $impl_name: ident;)+ ) => {
+    ( $($impl_name: ident as $name: ident),+ ) => {
         $(pub fn $name(&self) -> String {
             let manager_ptr = unsafe { extern_manager::get() };
             let result = unsafe {
@@ -41,22 +41,33 @@ impl Node {
     }
 
     node_getters! {
-        is_listening_device, is_node_listening_device -> bool;
-        is_frequent_listening_device, is_node_frequent_listening_device -> bool;
-        is_beaming_device, is_node_beaming_device -> bool;
-        is_routing_device, is_node_routing_device -> bool;
-        is_security_device, is_node_security_device -> bool;
-        get_max_baud_rate, get_node_max_baud_rate -> u32;
-        get_version, get_node_version -> u8;
-        get_security, get_node_security -> u8;
-        is_zwave_plus, is_node_zwave_plus -> bool;
-        get_basic, get_node_basic -> u8;
-        get_generic, get_node_generic -> u8;
-        get_specific, get_node_specific -> u8;
+        is_node_listening_device as is_listening_device -> bool,
+        is_node_frequent_listening_device as is_frequent_listening_device -> bool,
+        is_node_beaming_device as is_beaming_device -> bool,
+        is_node_routing_device as is_routing_device -> bool,
+        is_node_security_device as is_security_device -> bool,
+        get_node_max_baud_rate as get_max_baud_rate -> u32,
+        get_node_version as get_version -> u8,
+        get_node_security as get_security -> u8,
+        is_node_zwave_plus as is_zwave_plus -> bool,
+        get_node_basic as get_basic -> u8,
+        get_node_generic as get_generic -> u8,
+        get_node_specific as get_specific -> u8
     }
 
     node_string_getters! {
-        get_manufacturer_name, get_node_manufacturer_name;
+        get_node_type as get_type,
+        get_node_manufacturer_name as get_manufacturer_name,
+        get_node_product_name as get_product_name,
+        get_node_name as get_name,
+        get_node_location as get_location,
+        get_node_manufacturer_id as get_manufacturer_id,
+        get_node_product_type as get_product_type,
+        get_node_product_id as get_product_id,
+        get_node_query_stage as get_query_stage,
+        get_node_device_type_string as get_device_type_string,
+        get_node_role_string as get_role_string,
+        get_node_plus_type_string as get_plus_type_string
     }
 }
 
@@ -67,7 +78,10 @@ impl fmt::Debug for Node {
                 is_beaming_device: {:?}, is_routing_device: {:?}, is_security_device: {:?}, \
                 max_baud_rate: {:?}, version: {:?}, security: {:?}, is_zwave_plus: {:?}, \
                 basic: {:?}, generic: {:?}, specific: {:?}, \
-                manufacturer_name: {:?} }}",
+                type: {:?}, manufacturer_name: {:?}, product_name: {:?}, \
+                name: {:?}, location: {:?}, manufacturer_id: {:?}, product_type: {:?} \
+                product_id: {:?}, query_stage: {:?}, device_type_string: {:?}, \
+                role_string: {:?}, plus_type_string: {:?} }}",
                self.home_id,
                self.node_id,
                self.is_listening_device(),
@@ -82,7 +96,18 @@ impl fmt::Debug for Node {
                self.get_basic(),
                self.get_generic(),
                self.get_specific(),
-               self.get_manufacturer_name()
+               self.get_type(),
+               self.get_manufacturer_name(),
+               self.get_product_name(),
+               self.get_name(),
+               self.get_location(),
+               self.get_manufacturer_id(),
+               self.get_product_type(),
+               self.get_product_id(),
+               self.get_query_stage(),
+               self.get_device_type_string(),
+               self.get_role_string(),
+               self.get_plus_type_string()
         )
     }
 }

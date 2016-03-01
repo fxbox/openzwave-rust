@@ -86,8 +86,20 @@ GET_NODE_FUNC(get_specific, uint8);
 #define GET_NODE_STRING_FUNC(name) \
   GET_NODE_FUNC(name, char *, const RustStringCreator stringCreator)
 
+GET_NODE_STRING_FUNC(get_type);
 GET_NODE_STRING_FUNC(get_manufacturer_name);
+GET_NODE_STRING_FUNC(get_product_name);
+GET_NODE_STRING_FUNC(get_name);
+GET_NODE_STRING_FUNC(get_location);
+GET_NODE_STRING_FUNC(get_manufacturer_id);
+GET_NODE_STRING_FUNC(get_product_type);
+GET_NODE_STRING_FUNC(get_product_id);
+GET_NODE_STRING_FUNC(get_query_stage);
+GET_NODE_STRING_FUNC(get_device_type_string);
+GET_NODE_STRING_FUNC(get_role_string);
+GET_NODE_STRING_FUNC(get_plus_type_string);
 
+//TODO node neighbors
 #ifdef __cplusplus
 }  // extern "C"
 #endif

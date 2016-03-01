@@ -262,10 +262,21 @@ GET_NODE_FUNC_IMPL(get_generic, GetNodeGeneric, uint8)
 GET_NODE_FUNC_IMPL(get_specific, GetNodeSpecific, uint8)
 
 #define GET_NODE_STRING_FUNC_IMPL(name, name_impl) \
-  GET_NODE_STRING_FUNC(name) { \
-    return stringCreator(manager->name_impl(home_id, node_id).c_str()); \
+  GET_NODE_STRING_FUNC(get_ ## name) { \
+    return stringCreator(manager->GetNode ## name_impl(home_id, node_id).c_str()); \
   }
 
-GET_NODE_STRING_FUNC_IMPL(get_manufacturer_name, GetNodeManufacturerName)
+GET_NODE_STRING_FUNC_IMPL(type, Type)
+GET_NODE_STRING_FUNC_IMPL(manufacturer_name, ManufacturerName)
+GET_NODE_STRING_FUNC_IMPL(product_name, ProductName)
+GET_NODE_STRING_FUNC_IMPL(name, Name)
+GET_NODE_STRING_FUNC_IMPL(location, Location)
+GET_NODE_STRING_FUNC_IMPL(manufacturer_id, ManufacturerId)
+GET_NODE_STRING_FUNC_IMPL(product_type, ProductType)
+GET_NODE_STRING_FUNC_IMPL(product_id, ProductId)
+GET_NODE_STRING_FUNC_IMPL(query_stage, QueryStage)
+GET_NODE_STRING_FUNC_IMPL(device_type_string, DeviceTypeString)
+GET_NODE_STRING_FUNC_IMPL(role_string, RoleString)
+GET_NODE_STRING_FUNC_IMPL(plus_type_string, PlusTypeString)
 
 } /* extern "C" */
