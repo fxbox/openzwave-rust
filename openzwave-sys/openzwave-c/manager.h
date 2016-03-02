@@ -82,6 +82,12 @@ GET_NODE_FUNC(is_zwave_plus, bool);
 GET_NODE_FUNC(get_basic, uint8);
 GET_NODE_FUNC(get_generic, uint8);
 GET_NODE_FUNC(get_specific, uint8);
+GET_NODE_FUNC(is_info_received, bool);
+GET_NODE_FUNC(is_awake, bool);
+GET_NODE_FUNC(is_failed, bool);
+GET_NODE_FUNC(get_device_type, uint16);
+GET_NODE_FUNC(get_role, uint8);
+GET_NODE_FUNC(get_plus_type, uint8);
 
 #define GET_NODE_STRING_FUNC(name) \
   GET_NODE_FUNC(name, char *, const RustStringCreator stringCreator)

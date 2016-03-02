@@ -260,6 +260,12 @@ GET_NODE_FUNC_IMPL(is_zwave_plus, IsNodeZWavePlus, bool)
 GET_NODE_FUNC_IMPL(get_basic, GetNodeBasic, uint8)
 GET_NODE_FUNC_IMPL(get_generic, GetNodeGeneric, uint8)
 GET_NODE_FUNC_IMPL(get_specific, GetNodeSpecific, uint8)
+GET_NODE_FUNC_IMPL(is_info_received, IsNodeInfoReceived, bool)
+GET_NODE_FUNC_IMPL(is_awake, IsNodeAwake, bool)
+GET_NODE_FUNC_IMPL(is_failed, IsNodeFailed, bool)
+GET_NODE_FUNC_IMPL(get_device_type, GetNodeDeviceType, uint16)
+GET_NODE_FUNC_IMPL(get_role, GetNodeRole, uint8)
+GET_NODE_FUNC_IMPL(get_plus_type, GetNodePlusType, uint8)
 
 #define GET_NODE_STRING_FUNC_IMPL(name, name_impl) \
   GET_NODE_STRING_FUNC(get_ ## name) { \

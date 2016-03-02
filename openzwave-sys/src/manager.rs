@@ -85,9 +85,16 @@ pub use self::{
     manager_node_get_product_type as get_node_product_type,
     manager_node_get_product_id as get_node_product_id,
     manager_node_get_query_stage as get_node_query_stage,
+    manager_node_get_device_type as get_node_device_type,
     manager_node_get_device_type_string as get_node_device_type_string,
+    manager_node_get_role as get_node_role,
     manager_node_get_role_string as get_node_role_string,
+    manager_node_get_plus_type as get_node_plus_type,
     manager_node_get_plus_type_string as get_node_plus_type_string,
+
+    manager_node_is_info_received as is_node_info_received,
+    manager_node_is_awake as is_node_awake,
+    manager_node_is_failed as is_node_failed,
 };
 
 extern {
@@ -173,8 +180,15 @@ extern {
     pub fn manager_node_get_product_type(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
     pub fn manager_node_get_product_id(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
     pub fn manager_node_get_query_stage(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_device_type(manager: *mut Manager, home_id: u32, node_id: u8) -> u16;
     pub fn manager_node_get_device_type_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_role(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
     pub fn manager_node_get_role_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+    pub fn manager_node_get_plus_type(manager: *mut Manager, home_id: u32, node_id: u8) -> u8;
     pub fn manager_node_get_plus_type_string(manager: *mut Manager, home_id: u32, node_id: u8, stringCreator: RustStringCreator) -> *mut c_char;
+
+    pub fn manager_node_is_info_received(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_awake(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+    pub fn manager_node_is_failed(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
 }
 

@@ -52,7 +52,13 @@ impl Node {
         is_node_zwave_plus as is_zwave_plus -> bool,
         get_node_basic as get_basic -> u8,
         get_node_generic as get_generic -> u8,
-        get_node_specific as get_specific -> u8
+        get_node_specific as get_specific -> u8,
+        get_node_device_type as get_device_type -> u16,
+        get_node_role as get_role -> u8,
+        get_node_plus_type as get_plus_type -> u8,
+        is_node_info_received as is_info_received -> bool,
+        is_node_awake as is_awake -> bool,
+        is_node_failed as is_failed -> bool
     }
 
     node_string_getters! {
@@ -80,8 +86,11 @@ impl fmt::Debug for Node {
                 basic: {:?}, generic: {:?}, specific: {:?}, \
                 type: {:?}, manufacturer_name: {:?}, product_name: {:?}, \
                 name: {:?}, location: {:?}, manufacturer_id: {:?}, product_type: {:?} \
-                product_id: {:?}, query_stage: {:?}, device_type_string: {:?}, \
-                role_string: {:?}, plus_type_string: {:?} }}",
+                product_id: {:?}, query_stage: {:?}, \
+                is_info_received: {:?}, is_awake: {:?}, is_failed: {:?}, \
+                device_type: {:?}, device_type_string: {:?}, \
+                role: {:?}, role_string: {:?}, \
+                plus_type: {:?}, plus_type_string: {:?} }}",
                self.home_id,
                self.node_id,
                self.is_listening_device(),
@@ -105,9 +114,10 @@ impl fmt::Debug for Node {
                self.get_product_type(),
                self.get_product_id(),
                self.get_query_stage(),
-               self.get_device_type_string(),
-               self.get_role_string(),
-               self.get_plus_type_string()
+               self.is_info_received(), self.is_awake(), self.is_failed(),
+               self.get_device_type(), self.get_device_type_string(),
+               self.get_role(), self.get_role_string(),
+               self.get_plus_type(), self.get_plus_type_string()
         )
     }
 }
