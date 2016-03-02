@@ -200,6 +200,7 @@ GET_VALUE_FUNC(as_raw, void ** rust_value, const RustU8VecCreator vecCreator) {
   if (res) {
     *rust_value = vecCreator(value, length);
   }
+  delete[] value;
   return res;
 }
 
@@ -284,5 +285,27 @@ GET_NODE_STRING_FUNC_IMPL(query_stage, QueryStage)
 GET_NODE_STRING_FUNC_IMPL(device_type_string, DeviceTypeString)
 GET_NODE_STRING_FUNC_IMPL(role_string, RoleString)
 GET_NODE_STRING_FUNC_IMPL(plus_type_string, PlusTypeString)
+
+
+GET_NODE_FUNC(get_neighbors, void *, const RustU8VecCreator vecCreator) {
+  uint8* neighbors;
+  uint32 neighbors_count = manager->GetNodeNeighbors(home_id, node_id, &neighbors);
+  if (neighbors_count && neighbors) {
+    return vecCreator(neighbors, neighbors_count);
+  }
+  return nullptr;
+}
+
+GET_NODE_FUNC(
+    get_class_information, bool,
+    uint8 const command_class_id, char** class_name, uint8* class_version,
+    const RustStringCreator stringCreator) {
+  std::string class_name_str;
+  bool has_class = manager->GetNodeClassInformation(home_id, node_id, command_class_id, &class_name_str, class_version);
+  if (has_class) {
+    *class_name = stringCreator(class_name_str.c_str());
+  }
+  return has_class;
+}
 
 } /* extern "C" */

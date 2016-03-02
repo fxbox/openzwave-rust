@@ -105,6 +105,12 @@ GET_NODE_STRING_FUNC(get_device_type_string);
 GET_NODE_STRING_FUNC(get_role_string);
 GET_NODE_STRING_FUNC(get_plus_type_string);
 
+GET_NODE_FUNC(get_neighbors, void *, const RustU8VecCreator);
+GET_NODE_FUNC(
+    get_class_information, bool,
+    uint8 const command_class_id, char** class_name, uint8* class_version,
+    const RustStringCreator);
+
 //TODO node neighbors
 #ifdef __cplusplus
 }  // extern "C"

@@ -95,6 +95,9 @@ pub use self::{
     manager_node_is_info_received as is_node_info_received,
     manager_node_is_awake as is_node_awake,
     manager_node_is_failed as is_node_failed,
+
+    manager_node_get_neighbors as get_node_neighbors,
+    manager_node_get_class_information as get_node_class_information
 };
 
 extern {
@@ -190,5 +193,11 @@ extern {
     pub fn manager_node_is_info_received(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
     pub fn manager_node_is_awake(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
     pub fn manager_node_is_failed(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
+
+    pub fn manager_node_get_neighbors(manager: *mut Manager, home_id: u32, node_id: u8, vecCreator: RustVecCreator<u8>) -> *mut c_void;
+    pub fn manager_node_get_class_information(
+        manager: *mut Manager, home_id: u32, node_id: u8,
+        command_class_id: u8, class_name: *mut *mut c_char, class_version: *mut u8,
+        stringCreator: RustStringCreator) -> bool;
 }
 

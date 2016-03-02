@@ -1,7 +1,8 @@
-use std::fmt;
+use std::{ fmt, ptr };
 use ffi::manager as extern_manager;
-use ffi::utils::rust_string_creator;
+use ffi::utils::{ rust_string_creator, rust_vec_creator };
 use std::ffi::CString;
+use libc::c_char;
 
 #[derive(Clone, Copy)]
 pub struct Node {
@@ -75,6 +76,45 @@ impl Node {
         get_node_role_string as get_role_string,
         get_node_plus_type_string as get_plus_type_string
     }
+
+    pub fn get_neighbors(&self) -> Option<Vec<Node>> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let result_ptr = unsafe {
+            extern_manager::get_node_neighbors(manager_ptr, self.home_id, self.node_id, rust_vec_creator::<u8>)
+        } as *mut Vec<u8>;
+
+        if result_ptr.is_null() {
+            return None;
+        }
+
+        let vec_neighbors_id = unsafe { Box::from_raw(result_ptr) };
+        let vec_neighbors = vec_neighbors_id.into_iter()
+            .map(|id| Node { home_id: self.home_id, node_id: id })
+            .collect();
+        Some(vec_neighbors)
+    }
+
+    pub fn get_class_information(&self, command_class_id: u8) -> Option<(String, u8)> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        let mut class_name: *mut c_char = ptr::null_mut();
+        let mut class_version: u8 = 0;
+
+        let has_class = unsafe {
+            extern_manager::get_node_class_information(
+                manager_ptr, self.home_id, self.node_id,
+                command_class_id, &mut class_name, &mut class_version,
+                rust_string_creator
+            )
+        };
+
+        if !has_class {
+            return None;
+        }
+
+        let class_name = unsafe { CString::from_raw(class_name) }.into_string().unwrap();
+
+        Some((class_name, class_version))
+    }
 }
 
 impl fmt::Debug for Node {
@@ -90,7 +130,8 @@ impl fmt::Debug for Node {
                 is_info_received: {:?}, is_awake: {:?}, is_failed: {:?}, \
                 device_type: {:?}, device_type_string: {:?}, \
                 role: {:?}, role_string: {:?}, \
-                plus_type: {:?}, plus_type_string: {:?} }}",
+                plus_type: {:?}, plus_type_string: {:?} \
+                neighbors: {:?} }}",
                self.home_id,
                self.node_id,
                self.is_listening_device(),
@@ -117,7 +158,8 @@ impl fmt::Debug for Node {
                self.is_info_received(), self.is_awake(), self.is_failed(),
                self.get_device_type(), self.get_device_type_string(),
                self.get_role(), self.get_role_string(),
-               self.get_plus_type(), self.get_plus_type_string()
+               self.get_plus_type(), self.get_plus_type_string(),
+               self.get_neighbors()
         )
     }
 }
