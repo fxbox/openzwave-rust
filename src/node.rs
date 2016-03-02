@@ -1,7 +1,6 @@
 use std::{ fmt, ptr };
 use ffi::manager as extern_manager;
-use ffi::utils::{ rust_string_creator, rust_vec_creator };
-use std::ffi::CString;
+use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string };
 use libc::c_char;
 
 #[derive(Clone, Copy)]
@@ -27,11 +26,9 @@ macro_rules! node_string_getters {
         $(pub fn $name(&self) -> String {
             let manager_ptr = unsafe { extern_manager::get() };
             let result = unsafe {
-                CString::from_raw(
-                    extern_manager::$impl_name(manager_ptr, self.home_id, self.node_id, rust_string_creator)
-                )
+                extern_manager::$impl_name(manager_ptr, self.home_id, self.node_id, rust_string_creator)
             };
-            result.into_string().unwrap()
+            recover_string(result)
         })*
     }
 }
@@ -111,7 +108,7 @@ impl Node {
             return None;
         }
 
-        let class_name = unsafe { CString::from_raw(class_name) }.into_string().unwrap();
+        let class_name = recover_string(class_name);
 
         Some((class_name, class_version))
     }

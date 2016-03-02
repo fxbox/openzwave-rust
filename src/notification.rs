@@ -1,9 +1,8 @@
 pub use ffi::notification::{NotificationType, NotificationCode, Notification as ExternNotification};
 use ffi::notification as extern_notification;
 use value_classes::value_id::ValueID;
-use std::ffi::CString;
 use libc::c_char;
-use ffi::utils::rust_string_creator;
+use ffi::utils::{ rust_string_creator, recover_string };
 use node::Node;
 
 pub struct Notification {
@@ -98,9 +97,11 @@ impl Notification {
     }
 
     pub fn get_as_string(&self) -> String {
-        unsafe {
-            CString::from_raw(extern_notification::notification_get_as_string(self.ptr, rust_string_creator) as *mut c_char)
-        }.into_string().unwrap()
+        recover_string(
+            unsafe {
+                extern_notification::notification_get_as_string(self.ptr, rust_string_creator)
+            } as *mut c_char
+        )
     }
 }
 

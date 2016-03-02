@@ -1,7 +1,6 @@
 use ffi::manager;
 use libc::c_char;
-use ffi::utils::rust_string_creator;
-use std::ffi::CString;
+use ffi::utils::{ rust_string_creator, recover_string };
 
 pub struct Controller {
     home_id: u32,
@@ -22,9 +21,11 @@ macro_rules! network_impl_string {
     ( $( $name: ident ),+ ) => {
         $(
             pub fn $name(&self) -> String {
-                unsafe {
-                    CString::from_raw(manager::$name(self.ptr, self.home_id, rust_string_creator) as *mut c_char)
-                }.into_string().unwrap()
+                recover_string(
+                    unsafe {
+                        manager::$name(self.ptr, self.home_id, rust_string_creator)
+                    } as *mut c_char
+                )
             }
          )*
     };

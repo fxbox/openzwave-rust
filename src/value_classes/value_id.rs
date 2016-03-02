@@ -7,7 +7,7 @@ use std::fmt;
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
-use ffi::utils::{ rust_string_creator, rust_vec_creator, rust_string_vec_creator };
+use ffi::utils::{ rust_string_creator, rust_vec_creator, rust_string_vec_creator, recover_string };
 
 pub struct ValueList<'a> {
     value_id: &'a ValueID
@@ -23,8 +23,7 @@ impl<'a> ValueList<'a> {
         };
 
         if res {
-            let val = unsafe { CString::from_raw(raw_string) };
-            Ok(val.into_string().unwrap())
+            Ok(recover_string(raw_string))
         } else {
             Err("Could not get the value")
         }
@@ -224,8 +223,7 @@ impl ValueID {
         };
 
         if res {
-            let val = unsafe { CString::from_raw(raw_string) };
-            Ok(val.into_string().unwrap())
+            Ok(recover_string(raw_string))
         } else {
             Err("Could not get the value")
         }
@@ -259,10 +257,12 @@ impl ValueID {
     }
 
     pub fn get_label(&self) -> String {
-        unsafe {
-            let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_label(manager_ptr, self.ptr, rust_string_creator))
-        }.into_string().unwrap()
+        recover_string(
+            unsafe {
+                let manager_ptr = extern_manager::get();
+                extern_manager::get_value_label(manager_ptr, self.ptr, rust_string_creator)
+            }
+        )
     }
 
     pub fn set_label(&self, str: &str) -> Result<(), NulError> {
@@ -275,10 +275,12 @@ impl ValueID {
     }
 
     pub fn get_units(&self) -> String {
-        unsafe {
-            let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_units(manager_ptr, self.ptr, rust_string_creator))
-        }.into_string().unwrap()
+        recover_string(
+            unsafe {
+                let manager_ptr = extern_manager::get();
+                extern_manager::get_value_units(manager_ptr, self.ptr, rust_string_creator)
+            }
+        )
     }
 
     pub fn set_units(&self, str: &str) -> Result<(), NulError>  {
@@ -291,10 +293,12 @@ impl ValueID {
     }
 
     pub fn get_help(&self) -> String {
-        unsafe {
-            let manager_ptr = extern_manager::get();
-            CString::from_raw(extern_manager::get_value_help(manager_ptr, self.ptr, rust_string_creator))
-        }.into_string().unwrap()
+        recover_string(
+            unsafe {
+                let manager_ptr = extern_manager::get();
+                extern_manager::get_value_help(manager_ptr, self.ptr, rust_string_creator)
+            }
+        )
     }
 
     pub fn set_help(&self, str: &str) -> Result<(), NulError> {
