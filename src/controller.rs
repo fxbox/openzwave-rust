@@ -1,17 +1,18 @@
-use ffi::manager;
+use ffi::manager as extern_manager;
 use libc::c_char;
 use ffi::utils::{ rust_string_creator, recover_string };
 
+#[derive(PartialEq, Eq, Hash)]
 pub struct Controller {
-    home_id: u32,
-    ptr: *mut manager::Manager
+    home_id: u32
 }
 
 macro_rules! network_impl {
     ( $( $name: ident -> $type_: ty ),+ ) => {
         $(
             pub fn $name(&self) -> $type_ {
-                unsafe { manager::$name(self.ptr, self.home_id) }
+                let manager_ptr = unsafe { extern_manager::get() };
+                unsafe { extern_manager::$name(manager_ptr, self.home_id) }
             }
         )*
     };
@@ -21,9 +22,10 @@ macro_rules! network_impl_string {
     ( $( $name: ident ),+ ) => {
         $(
             pub fn $name(&self) -> String {
+                let manager_ptr = unsafe { extern_manager::get() };
                 recover_string(
                     unsafe {
-                        manager::$name(self.ptr, self.home_id, rust_string_creator)
+                        extern_manager::$name(manager_ptr, self.home_id, rust_string_creator)
                     } as *mut c_char
                 )
             }
@@ -32,15 +34,9 @@ macro_rules! network_impl_string {
 }
 
 impl Controller {
-    pub fn new(home_id: u32) -> Option<Controller> {
-        let manager_ptr = unsafe { manager::get() };
-        if manager_ptr.is_null() {
-            None
-        } else {
-            Some(Controller {
-                ptr: manager_ptr,
-                home_id: home_id
-            })
+    pub fn new(home_id: u32) -> Controller {
+        Controller {
+            home_id: home_id
         }
     }
 
@@ -55,7 +51,7 @@ impl Controller {
         is_bridge_controller -> bool,
         get_send_queue_count -> i32,
         log_driver_statistics -> (),
-        get_controller_interface_type -> manager::ControllerInterface
+        get_controller_interface_type -> extern_manager::ControllerInterface
     }
 
     network_impl_string! {
@@ -69,7 +65,7 @@ use std::fmt::{ self, Debug, Display, Formatter };
 
 impl Display for Controller {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "{}", self.home_id)
+        write!(f, "Controller {}", self.home_id)
     }
 }
 
