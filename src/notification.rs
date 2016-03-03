@@ -4,6 +4,7 @@ use value_classes::value_id::ValueID;
 use libc::c_char;
 use ffi::utils::{ rust_string_creator, recover_string };
 use node::Node;
+use controller::Controller;
 
 pub struct Notification {
     ptr: *const ExternNotification
@@ -24,6 +25,10 @@ impl Notification {
 
     pub fn get_home_id(&self) -> u32 {
         unsafe { extern_notification::notification_get_home_id(self.ptr) }
+    }
+
+    pub fn get_controller(&self) -> Controller {
+        Controller::new(self.get_home_id())
     }
 
     pub fn get_node_id(&self) -> u8 {
