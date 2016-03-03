@@ -114,7 +114,7 @@ pub struct Manager {
 }
 
 // TODO figure out how to make it work cross-thread
-pub trait NotificationWatcher /*: Sync*/ {
+pub trait NotificationWatcher: Sync {
     fn on_notification(&self, Notification);
 }
 
