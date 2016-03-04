@@ -1,6 +1,6 @@
 use std::{ fmt, ptr };
 use ffi::manager as extern_manager;
-use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string };
+use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string, recover_vec };
 use libc::c_char;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy)]
@@ -84,7 +84,7 @@ impl Node {
             return None;
         }
 
-        let vec_neighbors_id = unsafe { Box::from_raw(result_ptr) };
+        let vec_neighbors_id = recover_vec(result_ptr);
         let vec_neighbors = vec_neighbors_id.into_iter()
             .map(|id| Node { home_id: self.home_id, node_id: id })
             .collect();

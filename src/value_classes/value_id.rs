@@ -7,7 +7,10 @@ use std::fmt;
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType, ValueID as ExternValueID};
 
-use ffi::utils::{ rust_string_creator, rust_vec_creator, rust_string_vec_creator, recover_string };
+use ffi::utils::{
+    rust_string_creator, rust_vec_creator, rust_string_vec_creator,
+    recover_string, recover_vec
+};
 
 pub struct ValueList<'a> {
     value_id: &'a ValueID
@@ -42,8 +45,7 @@ impl<'a> ValueList<'a> {
         let c_items_void_ptr = &mut c_items as *mut *mut _ as *mut *mut c_void;
         let res = unsafe { extern_manager::get_value_list_items(manager_ptr, self.value_id.ptr, c_items_void_ptr, rust_string_vec_creator) };
         if res {
-            let vec_c_items = unsafe { Box::from_raw(c_items) };
-            Ok(vec_c_items)
+            Ok(recover_vec(c_items))
         } else {
             Err("Could not get the value")
         }
@@ -55,8 +57,7 @@ impl<'a> ValueList<'a> {
         let c_values_void_ptr = &mut c_values as *mut *mut _ as *mut *mut c_void;
         let res = unsafe { extern_manager::get_value_list_values(manager_ptr, self.value_id.ptr, c_values_void_ptr, rust_vec_creator::<i32>) };
         if res {
-            let vec_c_values = unsafe { Box::from_raw(c_values) };
-            Ok(vec_c_values)
+            Ok(recover_vec(c_values))
         } else {
             Err("Could not get the value")
         }
@@ -238,8 +239,7 @@ impl ValueID {
             let res = unsafe { extern_manager::get_value_as_raw(manager_ptr, self.ptr, raw_ptr_c_void, rust_vec_creator::<u8>) };
 
             if res {
-                let val = unsafe { Box::from_raw(raw_ptr) };
-                Ok(val)
+                Ok(recover_vec(raw_ptr))
             } else {
                 Err("Could not get the value")
             }

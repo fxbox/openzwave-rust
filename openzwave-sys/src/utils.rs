@@ -32,6 +32,11 @@ pub fn recover_string(data: *mut c_char) -> String {
     } .into_string().unwrap()
 }
 
+// Note: this is safe _only_ for pointers created from rust_vec_creator
+pub fn recover_vec<T>(data: *mut Vec<T>) -> Box<Vec<T>> {
+    unsafe { Box::from_raw(data) }
+}
+
 pub extern "C" fn rust_vec_creator<T: Clone>(data: *const T, length: usize) -> *mut c_void {
     let rust_data = unsafe { slice::from_raw_parts(data, length) };
     let mut vec: Box<Vec<T>> = Box::new(Vec::with_capacity(length));
