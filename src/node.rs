@@ -3,7 +3,7 @@ use ffi::manager as extern_manager;
 use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string };
 use libc::c_char;
 
-#[derive(Clone, Copy)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
 pub struct Node {
     home_id: u32,
     node_id: u8

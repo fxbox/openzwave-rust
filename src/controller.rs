@@ -2,7 +2,7 @@ use ffi::manager as extern_manager;
 use libc::c_char;
 use ffi::utils::{ rust_string_creator, recover_string };
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
 pub struct Controller {
     home_id: u32
 }
