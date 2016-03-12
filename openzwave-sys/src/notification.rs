@@ -54,7 +54,7 @@ extern {
     pub fn notification_get_type(notification: *const Notification) -> NotificationType;
     pub fn notification_get_home_id(notification: *const Notification) -> u32;
     pub fn notification_get_node_id(notification: *const Notification) -> u8;
-    pub fn notification_get_value_id(notification: *const Notification) -> *const ValueID;
+    pub fn notification_get_value_id(notification: *const Notification) -> ValueID;
     pub fn notification_get_group_idx(notification: *const Notification) -> u8;
     pub fn notification_get_event(notification: *const Notification) -> u8;
     pub fn notification_get_button_id(notification: *const Notification) -> u8;

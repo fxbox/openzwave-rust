@@ -6,4 +6,5 @@ authors = ["Julien Wajsberg <felash@gmail.com>"]
 [dependencies]
 openzwave-sys = { path = "openzwave-sys", version = "0.1" }
 libc = "0.2"
+itertools = "0.4.11"
 
