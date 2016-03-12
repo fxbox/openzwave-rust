@@ -1,9 +1,13 @@
 use std::{ fmt, ptr };
+
 use ffi::manager as extern_manager;
 use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string, recover_vec };
 use libc::c_char;
+use controller::Controller;
+use manager::NodeBasic;
+use itertools::free::join;
 
-#[derive(PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(PartialEq, Eq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub struct Node {
     home_id: u32,
     node_id: u8
@@ -48,7 +52,6 @@ impl Node {
         get_node_version as get_version -> u8,
         get_node_security as get_security -> u8,
         is_node_zwave_plus as is_zwave_plus -> bool,
-        get_node_basic as get_basic -> u8,
         get_node_generic as get_generic -> u8,
         get_node_specific as get_specific -> u8,
         get_node_device_type as get_device_type -> u16,
@@ -72,6 +75,23 @@ impl Node {
         get_node_device_type_string as get_device_type_string,
         get_node_role_string as get_role_string,
         get_node_plus_type_string as get_plus_type_string
+    }
+
+    pub fn get_controller(&self) -> Controller {
+        Controller::new(self.home_id)
+    }
+
+    pub fn get_home_id(&self) -> u32 {
+        self.home_id
+    }
+
+    pub fn get_id(&self) -> u8 {
+        self.node_id
+    }
+
+    pub fn get_basic(&self) -> Option<NodeBasic> {
+        let manager_ptr = unsafe { extern_manager::get() };
+        NodeBasic::from_u8(unsafe { extern_manager::get_node_basic(manager_ptr, self.home_id, self.node_id) })
     }
 
     pub fn get_neighbors(&self) -> Option<Vec<Node>> {
@@ -112,6 +132,24 @@ impl Node {
 
         Some((class_name, class_version))
     }
+
+    pub fn simple_debug(&self) -> String {
+        format!("Node {{ home_id: {}, node_id: {} }}", self.home_id, self.node_id)
+    }
+}
+
+impl fmt::Display for Node {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.pad(&format!("{:3} {:17} {:30} {:50} {:30} {:30}",
+                      self.get_id(),
+                      self.get_basic().map_or(String::from("unknown"), |basic| basic.to_string()),
+                      self.get_type(),
+                      self.get_product_name(),
+                      self.get_name(),
+                      self.get_location()
+                      )
+              )
+    }
 }
 
 impl fmt::Debug for Node {
@@ -127,8 +165,8 @@ impl fmt::Debug for Node {
                 is_info_received: {:?}, is_awake: {:?}, is_failed: {:?}, \
                 device_type: {:?}, device_type_string: {:?}, \
                 role: {:?}, role_string: {:?}, \
-                plus_type: {:?}, plus_type_string: {:?} \
-                neighbors: {:?} }}",
+                plus_type: {:?}, plus_type_string: {:?}, \
+                neighbors: [{}] }}",
                self.home_id,
                self.node_id,
                self.is_listening_device(),
@@ -156,7 +194,11 @@ impl fmt::Debug for Node {
                self.get_device_type(), self.get_device_type_string(),
                self.get_role(), self.get_role_string(),
                self.get_plus_type(), self.get_plus_type_string(),
-               self.get_neighbors()
+               join(self.get_neighbors()
+                        .unwrap_or(Vec::new())
+                        .iter()
+                        .map(|node: &Node| node.simple_debug()),
+                    ", ")
         )
     }
 }

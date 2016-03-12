@@ -85,108 +85,108 @@ void manager_set_poll_interval(Manager * manager, int32 interval, bool between_p
   manager->SetPollInterval(interval, between_poll);
 }
 
-bool manager_enable_poll_with_intensity(Manager * manager, const ValueID * value, uint8 intensity) {
-  return manager->EnablePoll(*value, intensity);
+bool manager_enable_poll_with_intensity(Manager * manager, const ValueID *vid, uint8 intensity) {
+  return manager->EnablePoll(*vid, intensity);
 }
 
-bool manager_enable_poll(Manager * manager, const ValueID * value) {
-  return manager->EnablePoll(*value);
+bool manager_enable_poll(Manager * manager, const ValueID *vid) {
+  return manager->EnablePoll(*vid);
 }
 
-bool manager_disable_poll(Manager * manager, const ValueID * value) {
-  return manager->DisablePoll(*value);
+bool manager_disable_poll(Manager * manager, const ValueID *vid) {
+  return manager->DisablePoll(*vid);
 }
 
-bool manager_is_polled(Manager * manager, const ValueID * value) {
-  return manager->isPolled(*value);
+bool manager_is_polled(Manager * manager, const ValueID *vid) {
+  return manager->isPolled(*vid);
 }
 
-void manager_set_poll_intensity(Manager * manager, const ValueID * value, uint8 intensity) {
-  manager->SetPollIntensity(*value, intensity);
+void manager_set_poll_intensity(Manager * manager, const ValueID *vid, uint8 intensity) {
+  manager->SetPollIntensity(*vid, intensity);
 }
 
-uint8 manager_get_poll_intensity(Manager * manager, const ValueID * value) {
-  return manager->GetPollIntensity(*value);
+uint8 manager_get_poll_intensity(Manager * manager, const ValueID *vid) {
+  return manager->GetPollIntensity(*vid);
 }
 
-char * manager_get_value_label(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
-  return stringCreator(manager->GetValueLabel(*id).c_str());
+char * manager_get_value_label(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueLabel(*vid).c_str());
 }
 
-void manager_set_value_label(Manager * manager, const ValueID * id, char const * str) {
+void manager_set_value_label(Manager * manager, const ValueID *vid, char const * str) {
   const std::string string(str);
-  manager->SetValueLabel(*id, string);
+  manager->SetValueLabel(*vid, string);
 }
 
-char * manager_get_value_units(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
-  return stringCreator(manager->GetValueUnits(*id).c_str());
+char * manager_get_value_units(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueUnits(*vid).c_str());
 }
 
-void manager_set_value_units(Manager * manager, const ValueID * id, char const * str) {
+void manager_set_value_units(Manager * manager, const ValueID *vid, char const * str) {
   const std::string string(str);
-  manager->SetValueUnits(*id, string);
+  manager->SetValueUnits(*vid, string);
 }
 
-char * manager_get_value_help(Manager * manager, const ValueID * id, const RustStringCreator stringCreator) {
-  return stringCreator(manager->GetValueHelp(*id).c_str());
+char * manager_get_value_help(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator) {
+  return stringCreator(manager->GetValueHelp(*vid).c_str());
 }
 
-void manager_set_value_help(Manager * manager, const ValueID * id, char const * str) {
+void manager_set_value_help(Manager * manager, const ValueID *vid, char const * str) {
   const std::string string(str);
-  manager->SetValueHelp(*id, string);
+  manager->SetValueHelp(*vid, string);
 }
 
-int32 manager_get_value_min(Manager * manager, const ValueID * id) {
-  return manager->GetValueMin(*id);
+int32 manager_get_value_min(Manager * manager, const ValueID *vid) {
+  return manager->GetValueMin(*vid);
 }
 
-int32 manager_get_value_max(Manager * manager, const ValueID * id) {
-  return manager->GetValueMax(*id);
+int32 manager_get_value_max(Manager * manager, const ValueID *vid) {
+  return manager->GetValueMax(*vid);
 }
 
-bool manager_is_value_read_only(Manager * manager, const ValueID * id) {
-  return manager->IsValueReadOnly(*id);
+bool manager_is_value_read_only(Manager * manager, const ValueID *vid) {
+  return manager->IsValueReadOnly(*vid);
 }
 
-bool manager_is_value_write_only(Manager * manager, const ValueID * id) {
-  return manager->IsValueWriteOnly(*id);
+bool manager_is_value_write_only(Manager * manager, const ValueID *vid) {
+  return manager->IsValueWriteOnly(*vid);
 }
 
-bool manager_is_value_set(Manager * manager, const ValueID * id) {
-  return manager->IsValueSet(*id);
+bool manager_is_value_set(Manager * manager, const ValueID *vid) {
+  return manager->IsValueSet(*vid);
 }
 
-bool manager_is_value_polled(Manager * manager, const ValueID * id) {
-  return manager->IsValuePolled(*id);
+bool manager_is_value_polled(Manager * manager, const ValueID *vid) {
+  return manager->IsValuePolled(*vid);
 }
 
 GET_VALUE_FUNC(as_bool, bool* value) {
-  return manager->GetValueAsBool(*id, value);
+  return manager->GetValueAsBool(*vid, value);
 }
 
 GET_VALUE_FUNC(as_byte, uint8* value) {
-  return manager->GetValueAsByte(*id, value);
+  return manager->GetValueAsByte(*vid, value);
 }
 
 GET_VALUE_FUNC(as_float, float* value) {
-  return manager->GetValueAsFloat(*id, value);
+  return manager->GetValueAsFloat(*vid, value);
 }
 
 GET_VALUE_FUNC(float_precision, uint8* value) {
-  return manager->GetValueFloatPrecision(*id, value);
+  return manager->GetValueFloatPrecision(*vid, value);
 }
 
 GET_VALUE_FUNC(as_int, int32* value) {
-  return manager->GetValueAsInt(*id, value);
+  return manager->GetValueAsInt(*vid, value);
 }
 
 GET_VALUE_FUNC(as_short, int16* value) {
-  return manager->GetValueAsShort(*id, value);
+  return manager->GetValueAsShort(*vid, value);
 }
 
 GET_VALUE_FUNC(as_string, char** value, const RustStringCreator stringCreator) {
   std::string result;
-  bool res =  manager->GetValueAsString(*id, &result);
+  bool res =  manager->GetValueAsString(*vid, &result);
   if (res) {
     *value = stringCreator(result.c_str());
   }
@@ -196,7 +196,7 @@ GET_VALUE_FUNC(as_string, char** value, const RustStringCreator stringCreator) {
 GET_VALUE_FUNC(as_raw, void ** rust_value, const RustU8VecCreator vecCreator) {
   uint8* value;
   uint8 length; // strangely GetValueAsRaw wants uint8
-  bool res = manager->GetValueAsRaw(*id, &value, &length);
+  bool res = manager->GetValueAsRaw(*vid, &value, &length);
   if (res) {
     *rust_value = vecCreator(value, length);
   }
@@ -206,7 +206,7 @@ GET_VALUE_FUNC(as_raw, void ** rust_value, const RustU8VecCreator vecCreator) {
 
 GET_VALUE_FUNC(list_selection_as_string, char** value, const RustStringCreator stringCreator) {
   std::string result;
-  bool res = manager->GetValueListSelection(*id, &result);
+  bool res = manager->GetValueListSelection(*vid, &result);
   if (res) {
     *value = stringCreator(result.c_str());
   }
@@ -214,13 +214,13 @@ GET_VALUE_FUNC(list_selection_as_string, char** value, const RustStringCreator s
 }
 
 GET_VALUE_FUNC(list_selection_as_int, int32* value) {
-  return manager->GetValueListSelection(*id, value);
+  return manager->GetValueListSelection(*vid, value);
 }
 
 GET_VALUE_FUNC(list_items, void ** rust_value, const RustStringVecCreator vecCreator) {
   std::vector<std::string> vec;
 
-  bool res = manager->GetValueListItems(*id, &vec);
+  bool res = manager->GetValueListItems(*vid, &vec);
 
   if (res) {
     size_t length = vec.size();
@@ -237,7 +237,7 @@ GET_VALUE_FUNC(list_items, void ** rust_value, const RustStringVecCreator vecCre
 
 GET_VALUE_FUNC(list_values, void ** rust_value, const RustI32VecCreator vecCreator) {
   std::vector<int32> vec;
-  bool res = manager->GetValueListValues(*id, &vec);
+  bool res = manager->GetValueListValues(*vid, &vec);
   if (res) {
     *rust_value = vecCreator(vec.data(), vec.size());
   }

@@ -9,14 +9,14 @@ typedef ValueID::ValueGenre ValueGenre;
 typedef ValueID::ValueType ValueType;
 
 // constructors
-ValueID * value_id_from_packed_id(uint32 home_id, uint64 id);
-ValueID * value_id_from_values(uint32 home_id,
-                               uint8 node_id,
-                               ValueGenre genre,
-                               uint8 command_class_id,
-                               uint8 instance,
-                               uint8 value_index,
-                               ValueType type);
+ValueID value_id_from_packed_id(uint32 home_id, uint64 id);
+ValueID value_id_from_values(uint32 home_id,
+                             uint8 node_id,
+                             ValueGenre genre,
+                             uint8 command_class_id,
+                             uint8 instance,
+                             uint8 value_index,
+                             ValueType type);
 
 // instance methods
 uint32 value_id_get_home_id(ValueID *);

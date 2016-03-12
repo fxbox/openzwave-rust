@@ -1,5 +1,6 @@
 #include <openzwave/Manager.h>
 #include <openzwave/Driver.h>
+#include "value_classes/value_id.h"
 #include "utils.h"
 
 #ifdef __cplusplus
@@ -31,28 +32,28 @@ char * manager_get_controller_path(Manager * manager, const uint32 home_id, cons
 
 int32 manager_get_poll_interval(Manager * manager);
 void manager_set_poll_interval(Manager * manager, int32 interval, bool between_poll);
-bool manager_enable_poll_with_intensity(Manager * manager, const ValueID * value, uint8 intensity);
-bool manager_enable_poll(Manager * manager, const ValueID * value);
-bool manager_disable_poll(Manager * manager, const ValueID * value);
-bool manager_is_polled(Manager * manager, const ValueID * value);
-void manager_set_poll_intensity(Manager * manager, const ValueID * value, uint8 intensity);
-uint8 manager_get_poll_intensity(Manager * manager, const ValueID * value);
+bool manager_enable_poll_with_intensity(Manager * manager, const ValueID *vid, uint8 intensity);
+bool manager_enable_poll(Manager * manager, const ValueID *vid);
+bool manager_disable_poll(Manager * manager, const ValueID *vid);
+bool manager_is_polled(Manager * manager, const ValueID *vid);
+void manager_set_poll_intensity(Manager * manager, const ValueID *vid, uint8 intensity);
+uint8 manager_get_poll_intensity(Manager * manager, const ValueID *vid);
 
-char * manager_get_value_label(Manager * manager, const ValueID * id, const RustStringCreator stringCreator);
-void manager_set_value_label(Manager * manager, const ValueID * id, char const * str);
-char * manager_get_value_units(Manager * manager, const ValueID * id, const RustStringCreator stringCreator);
-void manager_set_value_units(Manager * manager, const ValueID * id, char const * str);
-char * manager_get_value_help(Manager * manager, const ValueID * id, const RustStringCreator stringCreator);
-void manager_set_value_help(Manager * manager, const ValueID * id, char const * str);
-int32 manager_get_value_min(Manager * manager, const ValueID * id);
-int32 manager_get_value_max(Manager * manager, const ValueID * id);
-bool manager_is_value_read_only(Manager * manager, const ValueID * id);
-bool manager_is_value_write_only(Manager * manager, const ValueID * id);
-bool manager_is_value_set(Manager * manager, const ValueID * id);
-bool manager_is_value_polled(Manager * manager, const ValueID * id);
+char * manager_get_value_label(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator);
+void manager_set_value_label(Manager * manager, const ValueID *vid, char const * str);
+char * manager_get_value_units(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator);
+void manager_set_value_units(Manager * manager, const ValueID *vid, char const * str);
+char * manager_get_value_help(Manager * manager, const ValueID *vid, const RustStringCreator stringCreator);
+void manager_set_value_help(Manager * manager, const ValueID *vid, char const * str);
+int32 manager_get_value_min(Manager * manager, const ValueID *vid);
+int32 manager_get_value_max(Manager * manager, const ValueID *vid);
+bool manager_is_value_read_only(Manager * manager, const ValueID *vid);
+bool manager_is_value_write_only(Manager * manager, const ValueID *vid);
+bool manager_is_value_set(Manager * manager, const ValueID *vid);
+bool manager_is_value_polled(Manager * manager, const ValueID *vid);
 
 #define GET_VALUE_FUNC(name, ...) \
-  bool manager_get_value_ ## name (Manager * manager, const ValueID * id, __VA_ARGS__)
+  bool manager_get_value_ ## name (Manager * manager, const ValueID *vid, __VA_ARGS__)
 
 GET_VALUE_FUNC(as_bool, bool*);
 GET_VALUE_FUNC(as_byte, uint8*);

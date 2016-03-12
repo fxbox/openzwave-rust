@@ -1,5 +1,6 @@
 pub use ffi::notification::{NotificationType, NotificationCode, Notification as ExternNotification};
 use ffi::notification as extern_notification;
+use ffi::value_classes::value_id as extern_value_id;
 use value_classes::value_id::ValueID;
 use libc::c_char;
 use ffi::utils::{ rust_string_creator, recover_string };
@@ -40,7 +41,12 @@ impl Notification {
     }
 
     pub fn get_value_id(&self) -> ValueID {
-        ValueID::new(unsafe { extern_notification::notification_get_value_id(self.ptr) })
+        unsafe {
+            let ozw_vid = extern_notification::notification_get_value_id(self.ptr);
+
+            ValueID::from_packed_id(extern_value_id::value_id_get_home_id(&ozw_vid),
+                                    extern_value_id::value_id_get_id(&ozw_vid))
+        }
     }
 
     pub fn get_group_idx(&self) -> Option<u8> {
