@@ -245,7 +245,7 @@ GET_VALUE_FUNC(list_values, void ** rust_value, const RustI32VecCreator vecCreat
 }
 
 #define GET_NODE_FUNC_IMPL(name, name_impl, type) \
-  GET_NODE_FUNC(name, type) { \
+  GET_NODE_FUNC_NO_ARGS(name, type) { \
     return manager->name_impl(home_id, node_id); \
   }
 
