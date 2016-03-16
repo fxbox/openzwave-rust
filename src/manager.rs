@@ -17,6 +17,18 @@ c_like_enum! {
     }
 }
 
+use std::fmt;
+impl fmt::Display for NodeBasic {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.pad(match self {
+            &NodeBasic::Controller => "Controller",
+            &NodeBasic::StaticController => "Static Controller",
+            &NodeBasic::Slave => "Slave",
+            &NodeBasic::RoutingSlave => "Routing Slave",
+        })
+    }
+}
+
 c_like_enum! {
     CommandClass {
         NoOperation = 0,
@@ -226,39 +238,39 @@ impl Manager {
         }
     }
 
-    pub fn enable_poll_with_intensity(&mut self, value: &ValueID, intensity: u8) -> bool {
+    pub fn enable_poll_with_intensity(&mut self, vid: &ValueID, intensity: u8) -> bool {
         unsafe {
-            extern_manager::manager_enable_poll_with_intensity(self.ptr, value.ptr, intensity)
+            extern_manager::manager_enable_poll_with_intensity(self.ptr, &vid.ozw_vid(), intensity)
         }
     }
 
-    pub fn enable_poll(&mut self, value: &ValueID) -> bool {
+    pub fn enable_poll(&mut self, vid: &ValueID) -> bool {
         unsafe {
-            extern_manager::manager_enable_poll(self.ptr, value.ptr)
+            extern_manager::manager_enable_poll(self.ptr, &vid.ozw_vid())
         }
     }
 
-    pub fn disable_poll(&mut self, value: &ValueID) -> bool {
+    pub fn disable_poll(&mut self, vid: &ValueID) -> bool {
         unsafe {
-            extern_manager::manager_disable_poll(self.ptr, value.ptr)
+            extern_manager::manager_disable_poll(self.ptr, &vid.ozw_vid())
         }
     }
 
-    pub fn is_polled(&mut self, value: &ValueID) -> bool {
+    pub fn is_polled(&mut self, vid: &ValueID) -> bool {
         unsafe {
-            extern_manager::manager_is_polled(self.ptr, value.ptr)
+            extern_manager::manager_is_polled(self.ptr, &vid.ozw_vid())
         }
     }
 
-    pub fn set_poll_intensity(&mut self, value: &ValueID, intensity: u8) {
+    pub fn set_poll_intensity(&mut self, vid: &ValueID, intensity: u8) {
         unsafe {
-            extern_manager::manager_set_poll_intensity(self.ptr, value.ptr, intensity)
+            extern_manager::manager_set_poll_intensity(self.ptr, &vid.ozw_vid(), intensity)
         }
     }
 
-    pub fn get_poll_intensity(&mut self, value: &ValueID) -> u8 {
+    pub fn get_poll_intensity(&mut self, vid: &ValueID) -> u8 {
         unsafe {
-            extern_manager::manager_get_poll_intensity(self.ptr, value.ptr)
+            extern_manager::manager_get_poll_intensity(self.ptr, &vid.ozw_vid())
         }
     }
 }

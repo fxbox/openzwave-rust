@@ -65,7 +65,11 @@ use std::fmt::{ self, Debug, Display, Formatter };
 
 impl Display for Controller {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "Controller {}", self.home_id)
+        f.pad(&format!("{}: HomeId: {:08x} Node: {} Path: {}",
+                       self.get_library_type_name(),
+                       self.get_home_id(),
+                       self.get_controller_node_id(),
+                       self.get_controller_path()))
     }
 }
 
