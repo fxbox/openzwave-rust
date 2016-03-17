@@ -4,8 +4,28 @@ use ffi::manager as extern_manager;
 use ffi::utils::{ rust_string_creator, rust_vec_creator, recover_string, recover_vec };
 use libc::c_char;
 use controller::Controller;
-use manager::NodeBasic;
 use itertools::free::join;
+
+// Mapping comes from https://github.com/OpenZWave/open-zwave-control-panel/blob/master/zwavelib.cpp
+c_like_enum! {
+    NodeBasic {
+        Controller = 1,
+        StaticController = 2,
+        Slave = 3,
+        RoutingSlave = 4
+    }
+}
+
+impl fmt::Display for NodeBasic {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.pad(match self {
+            &NodeBasic::Controller => "Controller",
+            &NodeBasic::StaticController => "Static Controller",
+            &NodeBasic::Slave => "Slave",
+            &NodeBasic::RoutingSlave => "Routing Slave",
+        })
+    }
+}
 
 #[derive(PartialEq, Eq, Ord, PartialOrd, Hash, Clone, Copy)]
 pub struct Node {
