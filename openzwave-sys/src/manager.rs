@@ -63,6 +63,16 @@ pub use self::{
     manager_get_value_list_selection_as_int as get_value_list_selection_as_int,
     manager_get_value_list_items as get_value_list_items,
     manager_get_value_list_values as get_value_list_values,
+
+    manager_set_value_bool as set_value_bool,
+    manager_set_value_byte as set_value_byte,
+    manager_set_value_float as set_value_float,
+    manager_set_value_int as set_value_int,
+    manager_set_value_short as set_value_short,
+    manager_set_value_string as set_value_string,
+    manager_set_value_raw as set_value_raw,
+    manager_set_value_list_selection_string as set_value_list_selection_string,
+
     manager_node_is_listening_device as is_node_listening_device,
     manager_node_is_frequent_listening_device as is_node_frequent_listening_device,
     manager_node_is_beaming_device as is_node_beaming_device,
@@ -160,6 +170,15 @@ extern {
     pub fn manager_get_value_list_selection_as_int(manager: *mut Manager, id: *const ValueID, result: *mut i32) -> bool;
     pub fn manager_get_value_list_items(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<*const c_char>) -> bool;
     pub fn manager_get_value_list_values(manager: *mut Manager, id: *const ValueID, result: *mut *mut c_void, vecCreator: RustVecCreator<i32>) -> bool;
+
+    pub fn manager_set_value_bool(manager: *mut Manager, id: *const ValueID, value: bool) -> bool;
+    pub fn manager_set_value_byte(manager: *mut Manager, id: *const ValueID, value: u8) -> bool;
+    pub fn manager_set_value_float(manager: *mut Manager, id: *const ValueID, value: c_float) -> bool;
+    pub fn manager_set_value_int(manager: *mut Manager, id: *const ValueID, value: i32) -> bool;
+    pub fn manager_set_value_short(manager: *mut Manager, id: *const ValueID, value: i16) -> bool;
+    pub fn manager_set_value_string(manager: *mut Manager, id: *const ValueID, value: *const c_char) -> bool;
+    pub fn manager_set_value_raw(manager: *mut Manager, id: *const ValueID, value: *const u8, len: u8) -> bool;
+    pub fn manager_set_value_list_selection_string(manager: *mut Manager, id: *const ValueID, value: *const c_char) -> bool;
 
     pub fn manager_node_is_listening_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
     pub fn manager_node_is_frequent_listening_device(manager: *mut Manager, home_id: u32, node_id: u8) -> bool;
