@@ -1,5 +1,6 @@
 use ffi::value_classes::value_id as extern_value_id;
 use ffi::manager as extern_manager;
+use ffi::utils::res_to_result;
 use libc::{ c_char, c_void };
 use std::ffi::{ CString, NulError };
 use std::ptr;
@@ -263,6 +264,97 @@ impl ValueID {
         } else {
             Err("Wrong type")
         }
+    }
+
+    pub fn set_bool(&self, value: bool) -> Result<(), ()> {
+        match self.get_type() {
+            ValueType::ValueType_Bool | ValueType::ValueType_Button => {
+                let manager_ptr = unsafe { extern_manager::get() };
+                res_to_result(unsafe {
+                    extern_manager::set_value_bool(manager_ptr, &self.as_ozw_vid(), value)
+                })
+            }
+            _ => Err(())
+        }
+    }
+
+    pub fn set_byte(&self, value: u8) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_Byte {
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_byte(manager_ptr, &self.as_ozw_vid(), value)
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_float(&self, value: f32) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_Decimal {
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_float(manager_ptr, &self.as_ozw_vid(), value)
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_int(&self, value: i32) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_Int {
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_int(manager_ptr, &self.as_ozw_vid(), value)
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_short(&self, value: i16) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_Short {
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_short(manager_ptr, &self.as_ozw_vid(), value)
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_string(&self, value: &str) -> Result<(), ()> {
+        // The underlying C++ lib accepts strings for all types
+        let manager_ptr = unsafe { extern_manager::get() };
+        if let Ok(c_string) = CString::new(value) {
+            res_to_result(unsafe {
+                extern_manager::set_value_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_raw(&self, value: &Vec<u8>) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_Raw && value.len() < 256 {
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_raw(manager_ptr, &self.as_ozw_vid(), value.as_ptr(), value.len() as u8)
+            })
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn set_list_selection_string(&self, value: &str) -> Result<(), ()> {
+        if self.get_type() == ValueType::ValueType_List {
+            if let Ok(c_string) = CString::new(value) {
+                let manager_ptr = unsafe { extern_manager::get() };
+                return res_to_result(unsafe {
+                    extern_manager::set_value_list_selection_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
+                });
+            }
+        }
+        Err(())
     }
 
     pub fn get_label(&self) -> String {

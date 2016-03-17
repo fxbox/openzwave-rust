@@ -244,6 +244,41 @@ GET_VALUE_FUNC(list_values, void ** rust_value, const RustI32VecCreator vecCreat
   return res;
 }
 
+SET_VALUE_FUNC(bool, bool value) {
+  return manager->SetValue(*vid, value);
+}
+
+SET_VALUE_FUNC(byte, uint8 value) {
+  return manager->SetValue(*vid, value);
+}
+
+SET_VALUE_FUNC(float, float value) {
+  return manager->SetValue(*vid, value);
+}
+
+SET_VALUE_FUNC(int, int32 value) {
+  return manager->SetValue(*vid, value);
+}
+
+SET_VALUE_FUNC(short, int16 value) {
+  return manager->SetValue(*vid, value);
+}
+
+SET_VALUE_FUNC(string, const char* value) {
+  std::string value_string(value);
+  return manager->SetValue(*vid, value_string);
+}
+
+SET_VALUE_FUNC(raw, const uint8* value, uint8 len) {
+  return manager->SetValue(*vid, value, len);
+}
+
+SET_VALUE_FUNC(list_selection_set_string, const char* selected_item) {
+  std::string selected_item_string(selected_item);
+  return manager->SetValue(*vid, selected_item_string);
+}
+
+
 #define GET_NODE_FUNC_IMPL(name, name_impl, type) \
   GET_NODE_FUNC(name, type) { \
     return manager->name_impl(home_id, node_id); \

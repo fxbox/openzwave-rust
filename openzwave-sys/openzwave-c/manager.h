@@ -68,6 +68,19 @@ GET_VALUE_FUNC(list_selection_as_int, int32*);
 GET_VALUE_FUNC(list_items, void ** value, const RustStringVecCreator);
 GET_VALUE_FUNC(list_values, void ** value, const RustI32VecCreator);
 
+
+#define SET_VALUE_FUNC(name, ...) \
+  bool manager_set_value_ ## name (Manager * manager, const ValueID * vid, __VA_ARGS__)
+
+SET_VALUE_FUNC(bool, bool);
+SET_VALUE_FUNC(byte, uint8);
+SET_VALUE_FUNC(float, float);
+SET_VALUE_FUNC(int, int32);
+SET_VALUE_FUNC(short, int16);
+SET_VALUE_FUNC(string, const char*);
+SET_VALUE_FUNC(raw, const uint8 * value, uint8 len);
+SET_VALUE_FUNC(list_selection_string, const char*);
+
 #define GET_NODE_FUNC(name, return_type, ...) \
   return_type manager_node_ ## name (Manager * manager, uint32 const home_id, uint8 const node_id, ##__VA_ARGS__)
 
