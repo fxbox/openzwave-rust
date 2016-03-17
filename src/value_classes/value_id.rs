@@ -473,7 +473,7 @@ impl fmt::Display for ValueID {
 
         let read_write = if self.is_read_only() { "R" } else if self.is_write_only() { "W" } else { "RW" };
 
-        f.pad(&format!("HomeId: {:08x} ID: {:016x} NodeId: {:3} {:20} CC: {:3} Type: {:8} Label: {:20} Value: {:8} ({})",
+        f.pad(&format!("HomeId: {:08x} ID: {:016x} NodeId: {:3} {:30} CC: {:20} Type: {:8} Label: {:20} Value: {:8} ({})",
                        self.get_home_id(),
                        self.get_id(),
                        self.get_node_id(),
