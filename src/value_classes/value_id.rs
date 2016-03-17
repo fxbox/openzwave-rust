@@ -365,11 +365,16 @@ impl ValueID {
 impl fmt::Display for ValueID {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let node = Node::from_id(self.get_home_id(), self.get_node_id());
+        let mut node_name = node.get_name();
+        if node_name.is_empty() {
+            node_name = node.get_product_name();
+        }
+
         f.pad(&format!("HomeId: {:08x} ID: {:016x} NodeId: {:3} {:20} CC: {:3} Type: {:8} Label: {:20} Value: {}",
                        self.get_home_id(),
                        self.get_id(),
                        self.get_node_id(),
-                       node.get_name(),
+                       node_name,
                        self.get_command_class_id(),
                        self.get_type(),
                        self.get_label(),
