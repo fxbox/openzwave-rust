@@ -69,26 +69,28 @@ GET_VALUE_FUNC(list_items, void ** value, const RustStringVecCreator);
 GET_VALUE_FUNC(list_values, void ** value, const RustI32VecCreator);
 
 #define GET_NODE_FUNC(name, return_type, ...) \
-  return_type manager_node_ ## name (Manager * manager, uint32 const home_id, uint8 const node_id, ##__VA_ARGS__)
+  return_type manager_node_ ## name (Manager * manager, uint32 home_id, uint8 node_id, __VA_ARGS__)
+#define GET_NODE_FUNC_NO_ARGS(name, return_type) \
+  return_type manager_node_ ## name (Manager * manager, uint32 home_id, uint8 node_id)
 
-GET_NODE_FUNC(is_listening_device, bool);
-GET_NODE_FUNC(is_frequent_listening_device, bool);
-GET_NODE_FUNC(is_beaming_device, bool);
-GET_NODE_FUNC(is_routing_device, bool);
-GET_NODE_FUNC(is_security_device, bool);
-GET_NODE_FUNC(get_max_baud_rate, uint32);
-GET_NODE_FUNC(get_version, uint8);
-GET_NODE_FUNC(get_security, uint8);
-GET_NODE_FUNC(is_zwave_plus, bool);
-GET_NODE_FUNC(get_basic, uint8);
-GET_NODE_FUNC(get_generic, uint8);
-GET_NODE_FUNC(get_specific, uint8);
-GET_NODE_FUNC(is_info_received, bool);
-GET_NODE_FUNC(is_awake, bool);
-GET_NODE_FUNC(is_failed, bool);
-GET_NODE_FUNC(get_device_type, uint16);
-GET_NODE_FUNC(get_role, uint8);
-GET_NODE_FUNC(get_plus_type, uint8);
+GET_NODE_FUNC_NO_ARGS(is_listening_device, bool);
+GET_NODE_FUNC_NO_ARGS(is_frequent_listening_device, bool);
+GET_NODE_FUNC_NO_ARGS(is_beaming_device, bool);
+GET_NODE_FUNC_NO_ARGS(is_routing_device, bool);
+GET_NODE_FUNC_NO_ARGS(is_security_device, bool);
+GET_NODE_FUNC_NO_ARGS(get_max_baud_rate, uint32);
+GET_NODE_FUNC_NO_ARGS(get_version, uint8);
+GET_NODE_FUNC_NO_ARGS(get_security, uint8);
+GET_NODE_FUNC_NO_ARGS(is_zwave_plus, bool);
+GET_NODE_FUNC_NO_ARGS(get_basic, uint8);
+GET_NODE_FUNC_NO_ARGS(get_generic, uint8);
+GET_NODE_FUNC_NO_ARGS(get_specific, uint8);
+GET_NODE_FUNC_NO_ARGS(is_info_received, bool);
+GET_NODE_FUNC_NO_ARGS(is_awake, bool);
+GET_NODE_FUNC_NO_ARGS(is_failed, bool);
+GET_NODE_FUNC_NO_ARGS(get_device_type, uint16);
+GET_NODE_FUNC_NO_ARGS(get_role, uint8);
+GET_NODE_FUNC_NO_ARGS(get_plus_type, uint8);
 
 #define GET_NODE_STRING_FUNC(name) \
   GET_NODE_FUNC(name, char *, const RustStringCreator stringCreator)
