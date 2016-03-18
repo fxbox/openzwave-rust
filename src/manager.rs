@@ -7,12 +7,14 @@ use ffi::manager as extern_manager;
 use value_classes::value_id::ValueID;
 
 pub struct Manager {
-    pub ptr: *mut extern_manager::Manager,
+    ptr: *mut extern_manager::Manager,
     options: Options,
     watchers: Vec<Option<Box<WatcherWrapper>>>
 }
 
-// TODO figure out how to make it work cross-thread
+unsafe impl Send for Manager {}
+unsafe impl Sync for Manager {}
+
 pub trait NotificationWatcher: Sync {
     fn on_notification(&self, Notification);
 }
