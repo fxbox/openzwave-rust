@@ -16,6 +16,16 @@ Options * options_get() {
   return Options::Get();
 }
 
+bool options_add_option_bool(Options * options, const char *_name, bool _value) {
+  std::string sName(_name);
+  return options->AddOptionBool(sName, _value);
+}
+
+bool options_add_option_int(Options * options, const char *_name, int32 _value) {
+  std::string sName(_name);
+  return options->AddOptionInt(sName, _value);
+}
+
 bool options_add_option_string(Options * options, const char *_name, const char *_value, bool _append) {
   std::string sName(_name);
   std::string sValue(_value);
