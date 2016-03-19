@@ -49,6 +49,13 @@ pub enum NotificationCode {
     Code_Alive
 }
 
+use std::fmt;
+impl fmt::Display for NotificationCode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Debug::fmt(self, f)
+    }
+}
+
 pub enum Notification {}
 extern {
     pub fn notification_get_type(notification: *const Notification) -> NotificationType;
