@@ -27,18 +27,7 @@ pub enum ValueType {
 use std::fmt;
 impl fmt::Display for ValueType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.pad(match self {
-            &ValueType::ValueType_Bool => "Bool",
-            &ValueType::ValueType_Byte => "Byte",
-            &ValueType::ValueType_Decimal => "Decimal",
-            &ValueType::ValueType_Int => "Int",
-            &ValueType::ValueType_List => "List",
-            &ValueType::ValueType_Schedule => "Schedule",
-            &ValueType::ValueType_Short => "Short",
-            &ValueType::ValueType_String => "String",
-            &ValueType::ValueType_Button => "Button",
-            &ValueType::ValueType_Raw => "Raw",
-        })
+        f.pad(&format!("{:?}", self)[10..])   // Strip off the leading ValueType_
     }
 }
 
