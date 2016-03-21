@@ -113,49 +113,49 @@ impl Manager {
         })
     }
 
-    pub fn get_poll_interval(&mut self) -> i32 {
+    pub fn get_poll_interval(&self) -> i32 {
         unsafe {
             extern_manager::manager_get_poll_interval(self.ptr)
         }
     }
 
-    pub fn set_poll_interval(&mut self, interval_ms: i32, is_between_each_poll: bool) {
+    pub fn set_poll_interval(&self, interval_ms: i32, is_between_each_poll: bool) {
         unsafe {
             extern_manager::manager_set_poll_interval(self.ptr, interval_ms, is_between_each_poll)
         }
     }
 
-    pub fn enable_poll_with_intensity(&mut self, vid: &ValueID, intensity: u8) -> bool {
+    pub fn enable_poll_with_intensity(&self, vid: &ValueID, intensity: u8) -> bool {
         unsafe {
             extern_manager::manager_enable_poll_with_intensity(self.ptr, &vid.as_ozw_vid(), intensity)
         }
     }
 
-    pub fn enable_poll(&mut self, vid: &ValueID) -> bool {
+    pub fn enable_poll(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_enable_poll(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn disable_poll(&mut self, vid: &ValueID) -> bool {
+    pub fn disable_poll(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_disable_poll(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn is_polled(&mut self, vid: &ValueID) -> bool {
+    pub fn is_polled(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_is_polled(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn set_poll_intensity(&mut self, vid: &ValueID, intensity: u8) {
+    pub fn set_poll_intensity(&self, vid: &ValueID, intensity: u8) {
         unsafe {
             extern_manager::manager_set_poll_intensity(self.ptr, &vid.as_ozw_vid(), intensity)
         }
     }
 
-    pub fn get_poll_intensity(&mut self, vid: &ValueID) -> u8 {
+    pub fn get_poll_intensity(&self, vid: &ValueID) -> u8 {
         unsafe {
             extern_manager::manager_get_poll_intensity(self.ptr, &vid.as_ozw_vid())
         }
