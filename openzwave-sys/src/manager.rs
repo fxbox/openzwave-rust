@@ -115,11 +115,11 @@ extern {
     pub fn manager_get() -> *mut Manager;
     pub fn manager_destroy();
     pub fn manager_add_watcher(manager: *mut Manager,
-                               cb: extern fn(notification: *const Notification, ctx: *mut c_void),
-                               ctx: *mut c_void) -> bool;
+                               cb: extern fn(notification: *const Notification, ctx: *const c_void),
+                               ctx: *const c_void) -> bool;
     pub fn manager_remove_watcher(manager: *mut Manager,
-                                  cb: extern fn(notification: *const Notification, ctx: *mut c_void),
-                                  ctx: *mut c_void) -> bool;
+                                  cb: extern fn(notification: *const Notification, ctx: *const c_void),
+                                  ctx: *const c_void) -> bool;
     pub fn manager_add_driver(manager: *mut Manager,
                                 device: *const c_char,
                                 interface: *const ControllerInterface) -> bool;

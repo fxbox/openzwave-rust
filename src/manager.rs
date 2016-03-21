@@ -22,8 +22,8 @@ struct WatcherWrapper {
 }
 
 // watcher is actually a Box<WatcherWrapper>
-extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *mut c_void) {
-    let watcher_wrapper: &mut WatcherWrapper = unsafe { &mut *(watcher as *mut WatcherWrapper) };
+extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *const c_void) {
+    let watcher_wrapper: &WatcherWrapper = unsafe { &*(watcher as *const WatcherWrapper) };
     watcher_wrapper.watcher.on_notification(Notification::new(notification));
 }
 
@@ -54,9 +54,9 @@ impl Manager {
     */
 
     pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize, ()> {
-        let mut watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
+        let watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
 
-        let watcher_ptr: *mut c_void = &mut *watcher_wrapper as *mut _ as *mut c_void;
+        let watcher_ptr: *const c_void = &*watcher_wrapper as *const _ as *const c_void;
         let api_res = unsafe {
             extern_manager::manager_add_watcher(self.ptr, watcher_cb, watcher_ptr)
         };
