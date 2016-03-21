@@ -14,7 +14,7 @@ pub struct Manager {
 
 // TODO figure out how to make it work cross-thread
 pub trait NotificationWatcher: Sync {
-    fn on_notification(&self, Notification);
+    fn on_notification(&self, &Notification);
 }
 
 struct WatcherWrapper {
@@ -24,7 +24,8 @@ struct WatcherWrapper {
 // watcher is actually a Box<WatcherWrapper>
 extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *const c_void) {
     let watcher_wrapper: &WatcherWrapper = unsafe { &*(watcher as *const WatcherWrapper) };
-    watcher_wrapper.watcher.on_notification(Notification::new(notification));
+    let notification = Notification::new(notification);
+    watcher_wrapper.watcher.on_notification(&notification);
 }
 
 impl Manager {
