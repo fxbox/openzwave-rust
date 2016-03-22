@@ -14,7 +14,7 @@ pub struct Manager {
 
 // TODO figure out how to make it work cross-thread
 pub trait NotificationWatcher: Sync {
-    fn on_notification(&self, Notification);
+    fn on_notification(&self, &Notification);
 }
 
 struct WatcherWrapper {
@@ -22,9 +22,10 @@ struct WatcherWrapper {
 }
 
 // watcher is actually a Box<WatcherWrapper>
-extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *mut c_void) {
-    let watcher_wrapper: &mut WatcherWrapper = unsafe { &mut *(watcher as *mut WatcherWrapper) };
-    watcher_wrapper.watcher.on_notification(Notification::new(notification));
+extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *const c_void) {
+    let watcher_wrapper: &WatcherWrapper = unsafe { &*(watcher as *const WatcherWrapper) };
+    let notification = Notification::new(notification);
+    watcher_wrapper.watcher.on_notification(&notification);
 }
 
 impl Manager {
@@ -54,9 +55,9 @@ impl Manager {
     */
 
     pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize, ()> {
-        let mut watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
+        let watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
 
-        let watcher_ptr: *mut c_void = &mut *watcher_wrapper as *mut _ as *mut c_void;
+        let watcher_ptr: *const c_void = &*watcher_wrapper as *const _ as *const c_void;
         let api_res = unsafe {
             extern_manager::manager_add_watcher(self.ptr, watcher_cb, watcher_ptr)
         };
@@ -113,49 +114,49 @@ impl Manager {
         })
     }
 
-    pub fn get_poll_interval(&mut self) -> i32 {
+    pub fn get_poll_interval(&self) -> i32 {
         unsafe {
             extern_manager::manager_get_poll_interval(self.ptr)
         }
     }
 
-    pub fn set_poll_interval(&mut self, interval_ms: i32, is_between_each_poll: bool) {
+    pub fn set_poll_interval(&self, interval_ms: i32, is_between_each_poll: bool) {
         unsafe {
             extern_manager::manager_set_poll_interval(self.ptr, interval_ms, is_between_each_poll)
         }
     }
 
-    pub fn enable_poll_with_intensity(&mut self, vid: &ValueID, intensity: u8) -> bool {
+    pub fn enable_poll_with_intensity(&self, vid: &ValueID, intensity: u8) -> bool {
         unsafe {
             extern_manager::manager_enable_poll_with_intensity(self.ptr, &vid.as_ozw_vid(), intensity)
         }
     }
 
-    pub fn enable_poll(&mut self, vid: &ValueID) -> bool {
+    pub fn enable_poll(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_enable_poll(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn disable_poll(&mut self, vid: &ValueID) -> bool {
+    pub fn disable_poll(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_disable_poll(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn is_polled(&mut self, vid: &ValueID) -> bool {
+    pub fn is_polled(&self, vid: &ValueID) -> bool {
         unsafe {
             extern_manager::manager_is_polled(self.ptr, &vid.as_ozw_vid())
         }
     }
 
-    pub fn set_poll_intensity(&mut self, vid: &ValueID, intensity: u8) {
+    pub fn set_poll_intensity(&self, vid: &ValueID, intensity: u8) {
         unsafe {
             extern_manager::manager_set_poll_intensity(self.ptr, &vid.as_ozw_vid(), intensity)
         }
     }
 
-    pub fn get_poll_intensity(&mut self, vid: &ValueID) -> u8 {
+    pub fn get_poll_intensity(&self, vid: &ValueID) -> u8 {
         unsafe {
             extern_manager::manager_get_poll_intensity(self.ptr, &vid.as_ozw_vid())
         }
