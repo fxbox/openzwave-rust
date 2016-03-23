@@ -54,13 +54,13 @@ impl Manager {
     }
     */
 
-    pub fn add_node(&mut self, home_id:u32, secure: bool) -> Result<(), ()> {
+    pub fn add_node(&self, home_id:u32, secure: bool) -> Result<(), ()> {
         res_to_result(unsafe {
             extern_manager::manager_add_node(self.ptr, home_id, secure)
         })
     }
 
-    pub fn remove_node(&mut self, home_id:u32) -> Result<(), ()> {
+    pub fn remove_node(&self, home_id:u32) -> Result<(), ()> {
         res_to_result(unsafe {
             extern_manager::manager_remove_node(self.ptr, home_id)
         })
