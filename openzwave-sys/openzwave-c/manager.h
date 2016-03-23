@@ -14,6 +14,8 @@ typedef OpenZWave::ValueID ValueID;
 Manager * manager_create();
 Manager * manager_get();
 void manager_destroy();
+bool manager_add_node(Manager * manager, uint32 home_id, bool secure);
+bool manager_remove_node(Manager * manager, uint32 home_id);
 bool manager_add_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context);
 bool manager_remove_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context);
 bool manager_add_driver(Manager * manager, const char * _controllerPath, const Driver::ControllerInterface * _interface);
