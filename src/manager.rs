@@ -54,6 +54,18 @@ impl Manager {
     }
     */
 
+    pub fn add_node(&mut self, home_id:u32, secure: bool) -> Result<(), ()> {
+        res_to_result(unsafe {
+            extern_manager::manager_add_node(self.ptr, home_id, secure)
+        })
+    }
+
+    pub fn remove_node(&mut self, home_id:u32) -> Result<(), ()> {
+        res_to_result(unsafe {
+            extern_manager::manager_remove_node(self.ptr, home_id)
+        })
+    }
+
     pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize, ()> {
         let watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
 

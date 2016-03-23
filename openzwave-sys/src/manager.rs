@@ -17,6 +17,8 @@ pub use self::{
     manager_create as create,
     manager_get as get,
     manager_destroy as destroy,
+    manager_add_node as add_node,
+    manager_remove_node as remove_node,
     manager_add_watcher as add_watcher,
     manager_remove_watcher as remove_watcher,
     manager_add_driver as add_driver,
@@ -114,6 +116,8 @@ extern {
     pub fn manager_create() -> *mut Manager;
     pub fn manager_get() -> *mut Manager;
     pub fn manager_destroy();
+    pub fn manager_add_node(manager: *mut Manager, home_id: u32, secure: bool) -> bool;
+    pub fn manager_remove_node(manager: *mut Manager, home_id: u32) -> bool;
     pub fn manager_add_watcher(manager: *mut Manager,
                                cb: extern fn(notification: *const Notification, ctx: *const c_void),
                                ctx: *const c_void) -> bool;

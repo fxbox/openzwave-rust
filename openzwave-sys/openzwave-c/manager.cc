@@ -16,6 +16,14 @@ void manager_destroy() {
   Manager::Destroy();
 }
 
+bool manager_add_node(Manager * manager, uint32 home_id, bool secure) {
+  return manager->AddNode(home_id, secure);
+}
+
+bool manager_remove_node(Manager * manager, uint32 home_id) {
+  return manager->RemoveNode(home_id);
+}
+
 bool manager_add_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context) {
   return manager->AddWatcher(_watcher, _context);
 }
