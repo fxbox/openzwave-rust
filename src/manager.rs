@@ -8,9 +8,11 @@ use value_classes::value_id::ValueID;
 
 pub struct Manager {
     pub ptr: *mut extern_manager::Manager,
-    options: Options,
     watchers: Vec<Option<Box<WatcherWrapper>>>
 }
+
+unsafe impl Send for Manager {}
+unsafe impl Sync for Manager {}
 
 // TODO figure out how to make it work cross-thread
 pub trait NotificationWatcher: Sync {
@@ -37,7 +39,6 @@ impl Manager {
         } else {
             Ok(Manager {
                 ptr: external_manager,
-                options: options,
                 watchers: Vec::with_capacity(1)
             })
         }
