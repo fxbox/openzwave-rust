@@ -1,4 +1,4 @@
-pub use ffi::notification::{NotificationType, NotificationCode, Notification as ExternNotification};
+pub use ffi::notification::{ ControllerState, ControllerError, NotificationType, NotificationCode, Notification as ExternNotification };
 use ffi::notification as extern_notification;
 use ffi::value_classes::value_id as extern_value_id;
 use value_classes::value_id::ValueID;
@@ -82,25 +82,18 @@ impl Notification {
         }
     }
 
-    pub fn get_notification(&self) -> Option<NotificationCode> {
-        let result = match self.get_type() {
-            NotificationType::Type_Notification | NotificationType::Type_ControllerCommand =>
-                Some(unsafe { extern_notification::notification_get_notification(self.ptr) }),
-            _ => None
-        };
+    pub fn get_controller_state(&self) -> Option<ControllerState> {
+        if self.get_type() != NotificationType::Type_ControllerCommand {
+            return None;
+        }
+        ControllerState::from_u8(unsafe { extern_notification::notification_get_notification(self.ptr) })
+    }
 
-        result.and_then(|code| {
-            match code {
-                0 => Some(NotificationCode::Code_MsgComplete),
-                1 => Some(NotificationCode::Code_Timeout),
-                2 => Some(NotificationCode::Code_NoOperation),
-                3 => Some(NotificationCode::Code_Awake),
-                4 => Some(NotificationCode::Code_Sleep),
-                5 => Some(NotificationCode::Code_Dead),
-                6 => Some(NotificationCode::Code_Alive),
-                _ => None
-            }
-        })
+    pub fn get_notification_code(&self) -> Option<NotificationCode> {
+        if self.get_type() != NotificationType::Type_Notification {
+            return None;
+        }
+        NotificationCode::from_u8(unsafe { extern_notification::notification_get_notification(self.ptr) })
     }
 
     pub fn get_byte(&self) -> u8 {
@@ -133,7 +126,7 @@ impl fmt::Debug for Notification {
                self.get_event(),
                self.get_button_id(),
                self.get_scene_id(),
-               self.get_notification(),
+               self.get_notification_code(),
                self.get_byte(),
                self.get_as_string(),
                self.get_value_id()
