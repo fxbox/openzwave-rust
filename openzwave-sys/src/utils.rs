@@ -3,9 +3,31 @@
 use libc::{ c_char, c_void };
 use std::ffi::{ CString, CStr };
 use std::slice;
+use std::fmt;
+use std::error;
 
-pub fn res_to_result(res: bool) -> Result<(), ()> {
-    if res { Ok(()) } else { Err(()) }
+#[derive(Debug)]
+pub enum APIError {
+    GenericError
+}
+
+impl fmt::Display for APIError {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "{}", error::Error::description(self))
+    }
+}
+
+impl error::Error for APIError {
+    fn description(&self) -> &str {
+        match *self {
+            APIError::GenericError => "Generic OpenZWave API Error"
+        }
+    }
+}
+
+
+pub fn res_to_result(res: bool) -> Result<(), APIError> {
+    if res { Ok(()) } else { Err(APIError::GenericError) }
 }
 
 pub type RustStringCreator = extern fn(*const c_char) -> *mut c_char;

@@ -5,6 +5,7 @@ use notification::{Notification, ExternNotification};
 use options::Options;
 use ffi::manager as extern_manager;
 use value_classes::value_id::ValueID;
+use error::{ Error, Result };
 
 pub struct Manager {
     pub ptr: *mut extern_manager::Manager,
@@ -15,7 +16,6 @@ pub struct Manager {
 unsafe impl Send for Manager {}
 unsafe impl Sync for Manager {}
 
-// TODO figure out how to make it work cross-thread
 pub trait NotificationWatcher: Sync {
     fn on_notification(&self, &Notification);
 }
@@ -32,11 +32,11 @@ extern "C" fn watcher_cb(notification: *const ExternNotification, watcher: *cons
 }
 
 impl Manager {
-    pub fn create(mut options: Options) -> Result<Manager, ()> {
+    pub fn create(mut options: Options) -> Result<Manager> {
         try!(options.lock());
         let external_manager = unsafe { extern_manager::manager_create() };
         if external_manager.is_null() {
-            Err(())
+            Err(Error::InitError("Could not create the manager"))
         } else {
             Ok(Manager {
                 ptr: external_manager,
@@ -57,19 +57,19 @@ impl Manager {
     }
     */
 
-    pub fn add_node(&self, home_id:u32, secure: bool) -> Result<(), ()> {
+    pub fn add_node(&self, home_id:u32, secure: bool) -> Result<()> {
         res_to_result(unsafe {
             extern_manager::manager_add_node(self.ptr, home_id, secure)
-        })
+        }).or(Err(Error::APIError("Could not add a node")))
     }
 
-    pub fn remove_node(&self, home_id:u32) -> Result<(), ()> {
+    pub fn remove_node(&self, home_id:u32) -> Result<()> {
         res_to_result(unsafe {
             extern_manager::manager_remove_node(self.ptr, home_id)
-        })
+        }).or(Err(Error::APIError("Could not remove a node")))
     }
 
-    pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize, ()> {
+    pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize> {
         let watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
 
         let watcher_ptr: *const c_void = &*watcher_wrapper as *const _ as *const c_void;
@@ -82,11 +82,11 @@ impl Manager {
             self.watchers.push(Some(watcher_wrapper));
             Ok(position)
         } else {
-            Err(())
+            Err(Error::APIError("Could not add a watcher"))
         }
     }
 
-    pub fn remove_watcher(&mut self, position: usize) -> Result<(), ()> {
+    pub fn remove_watcher(&mut self, position: usize) -> Result<()> {
         let wrapper = self.watchers[position].take();
 
         if let Some(mut wrapper) = wrapper {
@@ -97,36 +97,36 @@ impl Manager {
             }
             result
         } else {
-            Err(())
+            Err(Error::APIError("Could not find the watcher to remove"))
         }
     }
 
-    fn remove_watcher_impl(&self, wrapper: &mut WatcherWrapper) -> Result<(), ()> {
+    fn remove_watcher_impl(&self, wrapper: &mut WatcherWrapper) -> Result<()> {
         let watcher_ptr: *mut c_void = wrapper as *mut _ as *mut c_void;
         res_to_result(unsafe {
             extern_manager::manager_remove_watcher(self.ptr, watcher_cb, watcher_ptr)
-        })
+        }).or(Err(Error::APIError("Could not remove a watcher")))
     }
 
-    pub fn add_driver(&mut self, device: &str) -> Result<(), ()> {
+    pub fn add_driver(&mut self, device: &str) -> Result<()> {
         let device = CString::new(device).unwrap();
         res_to_result(unsafe {
             extern_manager::manager_add_driver(self.ptr, device.as_ptr(), &extern_manager::ControllerInterface::ControllerInterface_Serial)
-        })
+        }).or(Err(Error::APIError("Could not add the driver")))
     }
 
-    pub fn add_usb_driver(&mut self) -> Result<(), ()> {
+    pub fn add_usb_driver(&mut self) -> Result<()> {
         let device = CString::new("HID Controller").unwrap();
         res_to_result(unsafe {
             extern_manager::manager_add_driver(self.ptr, device.as_ptr(), &extern_manager::ControllerInterface::ControllerInterface_Hid)
-        })
+        }).or(Err(Error::APIError("Could not add the USB driver")))
     }
 
-    pub fn remove_driver(&mut self, device: &str) -> Result<(), ()> {
+    pub fn remove_driver(&mut self, device: &str) -> Result<()> {
         let device = CString::new(device).unwrap();
         res_to_result(unsafe {
             extern_manager::manager_remove_driver(self.ptr, device.as_ptr())
-        })
+        }).or(Err(Error::APIError("Could not remove the driver")))
     }
 
     pub fn get_poll_interval(&self) -> i32 {
