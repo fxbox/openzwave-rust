@@ -8,6 +8,7 @@ use value_classes::value_id::ValueID;
 
 pub struct Manager {
     pub ptr: *mut extern_manager::Manager,
+    options: Options,
     watchers: Vec<Option<Box<WatcherWrapper>>>
 }
 
@@ -39,6 +40,7 @@ impl Manager {
         } else {
             Ok(Manager {
                 ptr: external_manager,
+                options: options,
                 watchers: Vec::with_capacity(1)
             })
         }
