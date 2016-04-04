@@ -36,7 +36,7 @@ impl Manager {
         try!(options.lock());
         let external_manager = unsafe { extern_manager::manager_create() };
         if external_manager.is_null() {
-            Err(Error::InitError("Could not create the manager"))
+            Err(Error::OptionsAreNotLocked("Manager::create"))
         } else {
             Ok(Manager {
                 ptr: external_manager,
@@ -60,13 +60,13 @@ impl Manager {
     pub fn add_node(&self, home_id:u32, secure: bool) -> Result<()> {
         res_to_result(unsafe {
             extern_manager::manager_add_node(self.ptr, home_id, secure)
-        }).or(Err(Error::APIError("Could not add a node")))
+        }).or(Err(Error::InvalidParameter("home_id", "Manager::add_node")))
     }
 
     pub fn remove_node(&self, home_id:u32) -> Result<()> {
         res_to_result(unsafe {
             extern_manager::manager_remove_node(self.ptr, home_id)
-        }).or(Err(Error::APIError("Could not remove a node")))
+        }).or(Err(Error::InvalidParameter("home_id", "Manager::remove_node")))
     }
 
     pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize> {
@@ -82,7 +82,7 @@ impl Manager {
             self.watchers.push(Some(watcher_wrapper));
             Ok(position)
         } else {
-            Err(Error::APIError("Could not add a watcher"))
+            Err(Error::APIError("Could not add a watcher: it's already added"))
         }
     }
 
@@ -105,28 +105,28 @@ impl Manager {
         let watcher_ptr: *mut c_void = wrapper as *mut _ as *mut c_void;
         res_to_result(unsafe {
             extern_manager::manager_remove_watcher(self.ptr, watcher_cb, watcher_ptr)
-        }).or(Err(Error::APIError("Could not remove a watcher")))
+        }).or(Err(Error::APIError("Could not remove a watcher as it was not added or already removed")))
     }
 
     pub fn add_driver(&mut self, device: &str) -> Result<()> {
         let device = CString::new(device).unwrap();
         res_to_result(unsafe {
             extern_manager::manager_add_driver(self.ptr, device.as_ptr(), &extern_manager::ControllerInterface::ControllerInterface_Serial)
-        }).or(Err(Error::APIError("Could not add the driver")))
+        }).or(Err(Error::APIError("Could not add the driver as it is already added")))
     }
 
     pub fn add_usb_driver(&mut self) -> Result<()> {
         let device = CString::new("HID Controller").unwrap();
         res_to_result(unsafe {
             extern_manager::manager_add_driver(self.ptr, device.as_ptr(), &extern_manager::ControllerInterface::ControllerInterface_Hid)
-        }).or(Err(Error::APIError("Could not add the USB driver")))
+        }).or(Err(Error::APIError("Could not add the driver as it is already added")))
     }
 
     pub fn remove_driver(&mut self, device: &str) -> Result<()> {
         let device = CString::new(device).unwrap();
         res_to_result(unsafe {
             extern_manager::manager_remove_driver(self.ptr, device.as_ptr())
-        }).or(Err(Error::APIError("Could not remove the driver")))
+        }).or(Err(Error::APIError("Could not remove the driver as it was not added or already removed")))
     }
 
     pub fn get_poll_interval(&self) -> i32 {

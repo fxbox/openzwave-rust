@@ -17,7 +17,7 @@ impl Options {
         };
 
         if external_options.is_null() {
-            Err(Error::InitError("Could not create Options"))
+            Err(Error::InitError("Could not create Options, see Openzwave logs for more information"))
         } else {
             Ok(Options { ptr: external_options })
         }
@@ -36,14 +36,14 @@ impl Options {
         let name_c = CString::new(name).unwrap();
         res_to_result(
             unsafe { extern_options::options_add_option_bool(self.ptr, name_c.as_ptr(), value) }
-        ).or(Err(Error::APIError("Could not add a bool option")))
+        ).or(Err(Error::OptionsAreLocked("Options::add_option_bool")))
     }
 
     pub fn add_option_int(&mut self, name: &str, value: i32) -> Result<()> {
         let name_c = CString::new(name).unwrap();
         res_to_result(
             unsafe { extern_options::options_add_option_int(self.ptr, name_c.as_ptr(), value) }
-        ).or(Err(Error::APIError("Could not add an int option")))
+        ).or(Err(Error::OptionsAreLocked("Options::add_option_int")))
     }
 
     pub fn add_option_string(&mut self, name: &str, value: &str, append: bool) -> Result<()> {
@@ -51,11 +51,12 @@ impl Options {
         let value_c = CString::new(value).unwrap();
         res_to_result(
             unsafe { extern_options::options_add_option_string(self.ptr, name_c.as_ptr(), value_c.as_ptr(), append) }
-        ).or(Err(Error::APIError("Could not add a string option")))
+        ).or(Err(Error::OptionsAreLocked("Options::add_option_string")))
     }
 
     pub fn lock(&mut self) -> Result<()> {
-        res_to_result(unsafe { extern_options::options_lock(self.ptr) }).or(Err(Error::InitError("Could not lock the options")))
+        res_to_result(unsafe { extern_options::options_lock(self.ptr) })
+            .or(Err(Error::OptionsAreLocked("Options::lock")))
     }
 }
 
