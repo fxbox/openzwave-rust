@@ -1,4 +1,3 @@
-#include <openzwave/Notification.h>
 #include "notification.h"
 
 extern "C" {

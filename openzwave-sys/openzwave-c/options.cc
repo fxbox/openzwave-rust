@@ -1,5 +1,4 @@
 #include <string>
-#include <openzwave/Options.h>
 #include "options.h"
 
 extern "C" {

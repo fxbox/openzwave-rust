@@ -1,5 +1,5 @@
-#include <openzwave/Manager.h>
-#include <openzwave/Driver.h>
+#include <Manager.h>
+#include <Driver.h>
 #include "value_classes/value_id.h"
 #include "utils.h"
 
