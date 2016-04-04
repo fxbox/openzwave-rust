@@ -1,0 +1,4 @@
+[submodule "openzwave-sys/open-zwave"]
+	path = openzwave-sys/open-zwave
+  url = https://github.com/OpenZWave/open-zwave.git
+  ignore = dirty
