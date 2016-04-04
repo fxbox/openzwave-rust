@@ -2,9 +2,10 @@ use ffi::value_classes::value_id as extern_value_id;
 use ffi::manager as extern_manager;
 use ffi::utils::res_to_result;
 use libc::{ c_char, c_void };
-use std::ffi::{ CString, NulError };
+use std::ffi::CString;
 use std::ptr;
 use std::fmt;
+use error::{ Error, GetSetError, Result };
 
 pub use ffi::value_classes::value_id::{ValueGenre, ValueType};
 
@@ -117,7 +118,7 @@ pub struct ValueList<'a> {
 }
 
 impl<'a> ValueList<'a> {
-    pub fn selection_as_string(&self) -> Result<String, &str> {
+    pub fn selection_as_string(&self) -> Result<String> {
         let manager_ptr = unsafe { extern_manager::get() };
         let mut raw_string: *mut c_char = ptr::null_mut();
 
@@ -128,18 +129,18 @@ impl<'a> ValueList<'a> {
         if res {
             Ok(recover_string(raw_string))
         } else {
-            Err("Could not get the value")
+            Err(Error::GetError(GetSetError::APIError("ValueList::selection_as_string")))
         }
     }
 
-    pub fn selection_as_int(&self) -> Result<i32, &str> {
+    pub fn selection_as_int(&self) -> Result<i32> {
         let manager_ptr = unsafe { extern_manager::get() };
         let mut val: i32 = 0;
         let res = unsafe { extern_manager::get_value_list_selection_as_int(manager_ptr, &self.value_id.as_ozw_vid(), &mut val) };
-        if res { Ok(val) } else { Err("Could not get the value") }
+        if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("ValueList::selection_as_int"))) }
     }
 
-    pub fn items(&self) -> Result<Box<Vec<String>>, &str> {
+    pub fn items(&self) -> Result<Box<Vec<String>>> {
         let manager_ptr = unsafe { extern_manager::get() };
         let mut c_items: *mut Vec<String> = ptr::null_mut();
         let c_items_void_ptr = &mut c_items as *mut *mut _ as *mut *mut c_void;
@@ -147,11 +148,11 @@ impl<'a> ValueList<'a> {
         if res {
             Ok(recover_vec(c_items))
         } else {
-            Err("Could not get the value")
+            Err(Error::GetError(GetSetError::APIError("ValueList::items")))
         }
     }
 
-    pub fn values(&self) -> Result<Box<Vec<i32>>, &str> {
+    pub fn values(&self) -> Result<Box<Vec<i32>>> {
         let manager_ptr = unsafe { extern_manager::get() };
         let mut c_values: *mut Vec<i32> = ptr::null_mut();
         let c_values_void_ptr = &mut c_values as *mut *mut _ as *mut *mut c_void;
@@ -159,7 +160,7 @@ impl<'a> ValueList<'a> {
         if res {
             Ok(recover_vec(c_values))
         } else {
-            Err("Could not get the value")
+            Err(Error::GetError(GetSetError::APIError("ValueList::values")))
         }
     }
 }
@@ -257,75 +258,75 @@ impl ValueID {
         self.id
     }
 
-    pub fn as_bool(&self) -> Result<bool, &str> {
+    pub fn as_bool(&self) -> Result<bool> {
         match self.get_type() {
             // The underlying library returns a value for both bool and button types.
             ValueType::ValueType_Bool | ValueType::ValueType_Button => {
                 let manager_ptr = unsafe { extern_manager::get() };
                 let mut val: bool = false;
                 let res = unsafe { extern_manager::get_value_as_bool(manager_ptr, &self.as_ozw_vid(), &mut val) };
-                if res { Ok(val) } else { Err("Could not get the value") }
+                if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("as_bool"))) }
             },
-            _ => Err("Wrong type")
+            _ => Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_byte(&self) -> Result<u8, &str> {
+    pub fn as_byte(&self) -> Result<u8> {
         if self.get_type() == ValueType::ValueType_Byte {
             let manager_ptr = unsafe { extern_manager::get() };
             let mut val: u8 = 0;
             let res = unsafe { extern_manager::get_value_as_byte(manager_ptr, &self.as_ozw_vid(), &mut val) };
-            if res { Ok(val) } else { Err("Could not get the value") }
+            if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("as_byte"))) }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_float(&self) -> Result<f32, &str> {
+    pub fn as_float(&self) -> Result<f32> {
         if self.get_type() == ValueType::ValueType_Decimal {
             let manager_ptr = unsafe { extern_manager::get() };
             let mut val: f32 = 0.;
             let res = unsafe { extern_manager::get_value_as_float(manager_ptr, &self.as_ozw_vid(), &mut val) };
-            if res { Ok(val) } else { Err("Could not get the value") }
+            if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("as_float"))) }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn get_float_precision(&self) -> Result<u8, &str> {
+    pub fn get_float_precision(&self) -> Result<u8> {
         if self.get_type() == ValueType::ValueType_Decimal {
             let manager_ptr = unsafe { extern_manager::get() };
             let mut val: u8 = 0;
             let res = unsafe { extern_manager::get_value_float_precision(manager_ptr, &self.as_ozw_vid(), &mut val) };
-            if res { Ok(val) } else { Err("Could not get the value") }
+            if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("get_float_precision"))) }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_int(&self) -> Result<i32, &str> {
+    pub fn as_int(&self) -> Result<i32> {
         if self.get_type() == ValueType::ValueType_Int {
             let manager_ptr = unsafe { extern_manager::get() };
             let mut val: i32 = 0;
             let res = unsafe { extern_manager::get_value_as_int(manager_ptr, &self.as_ozw_vid(), &mut val) };
-            if res { Ok(val) } else { Err("Could not get the value") }
+            if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("as_int"))) }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_short(&self) -> Result<i16, &str> {
+    pub fn as_short(&self) -> Result<i16> {
         if self.get_type() == ValueType::ValueType_Short {
             let manager_ptr = unsafe { extern_manager::get() };
             let mut val: i16 = 0;
             let res = unsafe { extern_manager::get_value_as_short(manager_ptr, &self.as_ozw_vid(), &mut val) };
-            if res { Ok(val) } else { Err("Could not get the value") }
+            if res { Ok(val) } else { Err(Error::GetError(GetSetError::APIError("as_short"))) }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_string(&self) -> Result<String, &str> {
+    pub fn as_string(&self) -> Result<String> {
         // The underlying C++ lib returns a value for any type.
         let manager_ptr = unsafe { extern_manager::get() };
         let mut raw_string: *mut c_char = ptr::null_mut();
@@ -337,11 +338,11 @@ impl ValueID {
         if res {
             Ok(recover_string(raw_string))
         } else {
-            Err("Could not get the value")
+            Err(Error::GetError(GetSetError::APIError("as_string")))
         }
     }
 
-    pub fn as_raw(&self) -> Result<Box<Vec<u8>>, &str> {
+    pub fn as_raw(&self) -> Result<Box<Vec<u8>>> {
         if self.get_type() == ValueType::ValueType_Raw {
             let mut raw_ptr: *mut Vec<u8> = ptr::null_mut();
             let raw_ptr_c_void = &mut raw_ptr as *mut *mut _ as *mut *mut c_void;
@@ -352,110 +353,107 @@ impl ValueID {
             if res {
                 Ok(recover_vec(raw_ptr))
             } else {
-                Err("Could not get the value")
+                Err(Error::GetError(GetSetError::APIError("as_raw")))
             }
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn as_list(&self) -> Result<ValueList, &str> {
+    pub fn as_list(&self) -> Result<ValueList> {
         if self.get_type() == ValueType::ValueType_List {
             Ok(ValueList { value_id: self })
         } else {
-            Err("Wrong type")
+            Err(Error::GetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_bool(&self, value: bool) -> Result<(), ()> {
+    pub fn set_bool(&self, value: bool) -> Result<()> {
         match self.get_type() {
             ValueType::ValueType_Bool | ValueType::ValueType_Button => {
                 let manager_ptr = unsafe { extern_manager::get() };
                 res_to_result(unsafe {
                     extern_manager::set_value_bool(manager_ptr, &self.as_ozw_vid(), value)
-                })
+                }).or(Err(Error::SetError(GetSetError::APIError("set_bool"))))
             }
-            _ => Err(())
+            _ => Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_byte(&self, value: u8) -> Result<(), ()> {
+    pub fn set_byte(&self, value: u8) -> Result<()> {
         if self.get_type() == ValueType::ValueType_Byte {
             let manager_ptr = unsafe { extern_manager::get() };
             res_to_result(unsafe {
                 extern_manager::set_value_byte(manager_ptr, &self.as_ozw_vid(), value)
-            })
+            }).or(Err(Error::SetError(GetSetError::APIError("set_byte"))))
         } else {
-            Err(())
+            Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_float(&self, value: f32) -> Result<(), ()> {
+    pub fn set_float(&self, value: f32) -> Result<()> {
         if self.get_type() == ValueType::ValueType_Decimal {
             let manager_ptr = unsafe { extern_manager::get() };
             res_to_result(unsafe {
                 extern_manager::set_value_float(manager_ptr, &self.as_ozw_vid(), value)
-            })
+            }).or(Err(Error::SetError(GetSetError::APIError("set_float"))))
         } else {
-            Err(())
+            Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_int(&self, value: i32) -> Result<(), ()> {
+    pub fn set_int(&self, value: i32) -> Result<()> {
         if self.get_type() == ValueType::ValueType_Int {
             let manager_ptr = unsafe { extern_manager::get() };
             res_to_result(unsafe {
                 extern_manager::set_value_int(manager_ptr, &self.as_ozw_vid(), value)
-            })
+            }).or(Err(Error::SetError(GetSetError::APIError("set_int"))))
         } else {
-            Err(())
+            Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_short(&self, value: i16) -> Result<(), ()> {
+    pub fn set_short(&self, value: i16) -> Result<()> {
         if self.get_type() == ValueType::ValueType_Short {
             let manager_ptr = unsafe { extern_manager::get() };
             res_to_result(unsafe {
                 extern_manager::set_value_short(manager_ptr, &self.as_ozw_vid(), value)
-            })
+            }).or(Err(Error::SetError(GetSetError::APIError("set_short"))))
         } else {
-            Err(())
+            Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_string(&self, value: &str) -> Result<(), ()> {
+    pub fn set_string(&self, value: &str) -> Result<()> {
         // The underlying C++ lib accepts strings for all types
         let manager_ptr = unsafe { extern_manager::get() };
-        if let Ok(c_string) = CString::new(value) {
-            res_to_result(unsafe {
-                extern_manager::set_value_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
-            })
-        } else {
-            Err(())
-        }
+        let c_string = try!(CString::new(value));
+        res_to_result(unsafe {
+            extern_manager::set_value_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
+        }).or(Err(Error::SetError(GetSetError::APIError("set_string"))))
     }
 
-    pub fn set_raw(&self, value: &Vec<u8>) -> Result<(), ()> {
+    pub fn set_raw(&self, value: &Vec<u8>) -> Result<()> {
         if self.get_type() == ValueType::ValueType_Raw && value.len() < 256 {
             let manager_ptr = unsafe { extern_manager::get() };
             res_to_result(unsafe {
                 extern_manager::set_value_raw(manager_ptr, &self.as_ozw_vid(), value.as_ptr(), value.len() as u8)
-            })
+            }).or(Err(Error::SetError(GetSetError::APIError("set_raw"))))
         } else {
-            Err(())
+            Err(Error::SetError(GetSetError::WrongType))
         }
     }
 
-    pub fn set_list_selection_string(&self, value: &str) -> Result<(), ()> {
+    pub fn set_list_selection_string(&self, value: &str) -> Result<()> {
         if self.get_type() == ValueType::ValueType_List {
-            if let Ok(c_string) = CString::new(value) {
-                let manager_ptr = unsafe { extern_manager::get() };
-                return res_to_result(unsafe {
-                    extern_manager::set_value_list_selection_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
-                });
-            }
+            let c_string = try!(CString::new(value));
+            let manager_ptr = unsafe { extern_manager::get() };
+            res_to_result(unsafe {
+                extern_manager::set_value_list_selection_string(manager_ptr, &self.as_ozw_vid(), c_string.as_ptr())
+            }).or(Err(Error::SetError(GetSetError::APIError("set_list_selection_string"))))
+        } else {
+            Err(Error::SetError(GetSetError::WrongType))
         }
-        Err(())
     }
 
     pub fn get_label(&self) -> String {
@@ -467,7 +465,7 @@ impl ValueID {
         )
     }
 
-    pub fn set_label(&self, str: &str) -> Result<(), NulError> {
+    pub fn set_label(&self, str: &str) -> Result<()> {
         unsafe {
             let manager_ptr = extern_manager::get();
             let c_string = try!(CString::new(str)).as_ptr();
@@ -485,7 +483,7 @@ impl ValueID {
         )
     }
 
-    pub fn set_units(&self, str: &str) -> Result<(), NulError>  {
+    pub fn set_units(&self, str: &str) -> Result<()>  {
         unsafe {
             let manager_ptr = extern_manager::get();
             let c_string = try!(CString::new(str)).as_ptr();
@@ -503,7 +501,7 @@ impl ValueID {
         )
     }
 
-    pub fn set_help(&self, str: &str) -> Result<(), NulError> {
+    pub fn set_help(&self, str: &str) -> Result<()> {
         unsafe {
             let manager_ptr = extern_manager::get();
             let c_string = try!(CString::new(str)).as_ptr();
