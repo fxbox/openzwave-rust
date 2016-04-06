@@ -1,4 +1,4 @@
-#include <openzwave/value_classes/ValueID.h>
+#include <value_classes/ValueID.h>
 
 #ifdef __cplusplus
 extern "C" {

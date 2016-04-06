@@ -1,4 +1,4 @@
-#include <openzwave/Notification.h>
+#include <Notification.h>
 #include "value_classes/value_id.h"
 #include "utils.h"
 

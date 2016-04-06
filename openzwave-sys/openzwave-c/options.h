@@ -1,4 +1,4 @@
-#include <openzwave/Options.h>
+#include <Options.h>
 
 #ifdef __cplusplus
 extern "C" {

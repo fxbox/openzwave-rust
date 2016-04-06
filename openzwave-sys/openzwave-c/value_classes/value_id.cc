@@ -1,4 +1,3 @@
-#include <openzwave/value_classes/ValueID.h>
 #include "value_id.h"
 
 extern "C" {
