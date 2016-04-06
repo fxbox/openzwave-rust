@@ -281,7 +281,7 @@ SET_VALUE_FUNC(raw, const uint8* value, uint8 len) {
   return manager->SetValue(*vid, value, len);
 }
 
-SET_VALUE_FUNC(list_selection_set_string, const char* selected_item) {
+SET_VALUE_FUNC(list_selection_string, const char* selected_item) {
   std::string selected_item_string(selected_item);
   return manager->SetValue(*vid, selected_item_string);
 }
