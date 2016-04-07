@@ -2,7 +2,7 @@ use value_classes::value_id::ValueID;
 use libc::c_char;
 use utils::RustStringCreator;
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 #[repr(C)]
 pub enum NotificationType {
     Type_ValueAdded = 0,
@@ -37,22 +37,68 @@ pub enum NotificationType {
     Type_NodeReset
 }
 
-#[derive(Debug)]
-#[repr(C)]
-pub enum NotificationCode {
-    Code_MsgComplete = 0,
-    Code_Timeout,
-    Code_NoOperation,
-    Code_Awake,
-    Code_Sleep,
-    Code_Dead,
-    Code_Alive
+c_like_enum! {
+    NotificationCode {
+        MsgComplete = 0,
+        Timeout = 1,
+        NoOperation = 2,
+        Awake = 3,
+        Sleep = 4,
+        Dead = 5,
+        Alive = 6
+    }
 }
 
 use std::fmt;
 impl fmt::Display for NotificationCode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(self, f)
+    }
+}
+
+c_like_enum! {
+    ControllerState {
+        Normal = 0,     // No command in progress.
+        Starting = 1,   // The command is starting.
+        Cancel = 2,     // The command was cancelled.
+        Error = 3,      // Command invocation had error(s) and was aborted.
+        Waiting = 4,    // Controller is waiting for a user action.
+        Sleeping = 5,   // Controller command is on a sleep queue wait for device.
+        InProgress = 6, // The controller is communicating with the other device to carry out the command.
+        Completed = 7,  // The command has completed successfully.
+        Failed = 8,     // The command has failed.
+        NodeOK = 9,     // Used only with ControllerCommand_HasNodeFailed to indicate that the controller thinks the node is OK.
+        NodeFailed = 10 // Used only with ControllerCommand_HasNodeFailed to indicate that the controller thinks the node has failed.
+    }
+}
+
+impl fmt::Display for ControllerState {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.pad(&format!("{:?}", self))
+    }
+}
+
+c_like_enum! {
+    ControllerError {
+        None = 0,           // No Error
+        ButtonNotFound = 1, // Button
+        NodeNotFound = 2,   // Button
+        NotBridge = 3,      // Button
+        NotSUC = 4,         // CreateNewPrimary
+        NotSecondary = 5,   // CreateNewPrimary
+        NotPrimary = 6,     // RemoveFailedNode, AddNodeToNetwork
+        IsPrimary = 7,      // ReceiveConfiguration
+        NotFound = 8,       // RemoveFailedNode
+        Busy = 9,           // RemoveFailedNode, RequestNetworkUpdate
+        Failed = 10,        // RemoveFailedNode, RequestNetworkUpdate
+        Disabled = 11,      // RequestNetworkUpdate error
+        Overflow = 12       // RequestNetworkUpdate error
+    }
+}
+
+impl fmt::Display for ControllerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.pad(&format!("{:?}", self))
     }
 }
 
