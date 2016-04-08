@@ -39,7 +39,7 @@ fn target_specific_work() {
 
 fn make() {
     let exit_code = Command::new("make")
-        .arg("-j4")
+        .arg(format!("-j{}", env::var("NUM_JOBS").unwrap()))
         .current_dir("open-zwave")
         .status().unwrap();
 
