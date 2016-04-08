@@ -1,4 +1,5 @@
 use ffi::options as extern_options;
+use ffi::get_default_config_path;
 use std::ffi::CString;
 use ffi::utils::res_to_result;
 use error::{ Result, Error };
@@ -9,7 +10,12 @@ pub struct Options {
 
 impl Options {
     pub fn create(config_path: &str, user_path: &str, command_line: &str) -> Result<Options> {
-        let config_path_c = CString::new(config_path).unwrap();
+        let config_path_c = if config_path.is_empty() {
+            CString::new(&*get_default_config_path().to_string_lossy())
+        } else {
+            CString::new(config_path)
+        }.unwrap();
+
         let user_path_c = CString::new(user_path).unwrap();
         let command_line_c = CString::new(command_line).unwrap();
         let external_options = unsafe {
