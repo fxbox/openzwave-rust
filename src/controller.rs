@@ -51,6 +51,7 @@ impl Controller {
         is_bridge_controller -> bool,
         get_send_queue_count -> i32,
         log_driver_statistics -> (),
+        write_config -> (),
         get_controller_interface_type -> extern_manager::ControllerInterface
     }
 
