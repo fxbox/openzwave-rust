@@ -17,6 +17,7 @@ pub use self::{
     manager_create as create,
     manager_get as get,
     manager_destroy as destroy,
+    manager_write_config as write_config,
     manager_add_node as add_node,
     manager_remove_node as remove_node,
     manager_add_watcher as add_watcher,
@@ -116,6 +117,7 @@ extern {
     pub fn manager_create() -> *mut Manager;
     pub fn manager_get() -> *mut Manager;
     pub fn manager_destroy();
+    pub fn manager_write_config(manager: *mut Manager, home_id: u32);
     pub fn manager_add_node(manager: *mut Manager, home_id: u32, secure: bool) -> bool;
     pub fn manager_remove_node(manager: *mut Manager, home_id: u32) -> bool;
     pub fn manager_add_watcher(manager: *mut Manager,
