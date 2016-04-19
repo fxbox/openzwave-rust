@@ -6,14 +6,9 @@ Installation
 
 Simply using the crate should work.
 
-### fatal error: Defs.h: No such file or directory
+We build openzwave from [a fork](https://github.com/fxbox/open-zwave) of the
+[original repository](https://github.com/OpenZWave/open-zwave). The change is a
+simple change to the Makefile that we still intend to upstream.
 
-If you have your openzwave header files in an unusual place
-(`/usr/include/openzwave` and `/usr/local/include/openzwave` are hardcoded in
-`build.rs`), you can use the environment variable `CPATH`
-to specify it.
-
-### Your libopenzwave.so is not in a standard path.
-
-You should likely add the path where it's installed to your `/etc/ld.so.conf`.
+So we don't use any copy of openzwave you may have on your machine.
 
