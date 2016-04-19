@@ -3,18 +3,18 @@ use std::process::Command;
 use std::env;
 
 #[cfg(target_os = "linux")]
-fn target_specific_work() {
+fn target_specific_work(_: &str) {
     println!("cargo:rustc-link-lib=udev");
     println!("cargo:rustc-link-lib=static=openzwave");
 }
 
 #[cfg(target_os = "macos")]
-fn target_specific_work() {
+fn target_specific_work(openzwave_build_dir: &str) {
     // The .a is a universal (fat) binary, so let's convert it to a thin binary
     // There is no easy way to disable the fat binary generation in open-zwave:
     // https://github.com/OpenZWave/open-zwave/issues/814
     let exit_code = Command::new("lipo")
-        .current_dir("open-zwave")
+        .current_dir(openzwave_build_dir)
         .arg("-thin").arg("x86_64")
         .arg("-output").arg("libopenzwave-thin.a")
         .arg("libopenzwave.a")
@@ -31,15 +31,16 @@ fn target_specific_work() {
 }
 
 #[cfg(target_os = "freebsd")]
-fn target_specific_work() {
+fn target_specific_work(_: &str) {
     println!("cargo:rustc-link-lib=usb");
     println!("cargo:rustc-link-lib=iconv");
     println!("cargo:rustc-link-lib=static=openzwave");
 }
 
-fn make() {
+fn make(output: &str) {
     let exit_code = Command::new("make")
         .arg(format!("-j{}", env::var("NUM_JOBS").unwrap()))
+        .env("top_builddir", output)
         .current_dir("open-zwave")
         .status().unwrap();
 
@@ -49,10 +50,11 @@ fn make() {
 }
 
 fn main() {
-    make();
+    let openzwave_build_dir = format!("{}/{}", env::var("OUT_DIR").unwrap(), "open-zwave");
+    make(&openzwave_build_dir);
 
     // Different platforms need some different work and linking parameters
-    target_specific_work();
+    target_specific_work(&openzwave_build_dir);
 
     // then build our thin wrapper
     let mut c = gcc::Config::new();
@@ -65,7 +67,5 @@ fn main() {
      .include("open-zwave/cpp/src")
      .compile("libopenzwave-c.a");
 
-    let this_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-
-    println!("cargo:rustc-link-search=native={}/open-zwave", this_dir);
+    println!("cargo:rustc-link-search=native={}", openzwave_build_dir);
 }
