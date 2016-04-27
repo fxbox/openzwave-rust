@@ -18,6 +18,10 @@ void manager_write_config(Manager * manager, uint32 home_id);
 
 bool manager_add_node(Manager * manager, uint32 home_id, bool secure);
 bool manager_remove_node(Manager * manager, uint32 home_id);
+void manager_test_network_node(Manager * manager, uint32 home_id, uint8_t node_id, uint32_t count);
+void manager_test_network(Manager * manager, uint32 home_id, uint32_t count);
+void manager_heal_network_node(Manager * manager, uint32 home_id, uint8_t node_id, bool doRR);
+void manager_heal_network(Manager * manager, uint32 home_id, bool doRR);
 bool manager_add_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context);
 bool manager_remove_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context);
 bool manager_add_driver(Manager * manager, const char * _controllerPath, const Driver::ControllerInterface * _interface);

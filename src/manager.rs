@@ -69,6 +69,30 @@ impl Manager {
         }).or(Err(Error::InvalidParameter("home_id", "Manager::remove_node")))
     }
 
+    pub fn test_network(&self, home_id:u32, count:u32) {
+        unsafe {
+            extern_manager::test_network(self.ptr, home_id, count);
+        }
+    }
+
+    pub fn test_network_node(&self, home_id:u32, node_id:u8, count:u32) {
+        unsafe {
+            extern_manager::test_network_node(self.ptr, home_id, node_id, count);
+        }
+    }
+
+    pub fn heal_network(&self, home_id:u32, do_rr:bool) {
+        unsafe {
+            extern_manager::heal_network(self.ptr, home_id, do_rr);
+        }
+    }
+
+    pub fn heal_network_node(&self, home_id:u32, node_id:u8, do_rr:bool) {
+        unsafe {
+            extern_manager::heal_network_node(self.ptr, home_id, node_id, do_rr);
+        }
+    }
+
     pub fn add_watcher<T: 'static + NotificationWatcher>(&mut self, watcher: T) -> Result<usize> {
         let watcher_wrapper = Box::new(WatcherWrapper { watcher: Box::new(watcher) });
 
