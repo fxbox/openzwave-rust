@@ -28,6 +28,22 @@ bool manager_remove_node(Manager * manager, uint32 home_id) {
   return manager->RemoveNode(home_id);
 }
 
+void manager_test_network_node(Manager * manager, uint32 home_id, uint8_t node_id, uint32_t count) {
+  manager->TestNetworkNode(home_id, node_id, count);
+}
+
+void manager_test_network(Manager * manager, uint32 home_id, uint32_t count) {
+  manager->TestNetwork(home_id, count);
+}
+
+void manager_heal_network_node(Manager * manager, uint32 home_id, uint8_t node_id, bool do_rr) {
+  manager->HealNetworkNode(home_id, node_id, do_rr);
+}
+
+void manager_heal_network(Manager * manager, uint32 home_id, bool do_rr) {
+  manager->HealNetwork(home_id, do_rr);
+}
+
 bool manager_add_watcher(Manager * manager, Manager::pfnOnNotification_t _watcher, void* _context) {
   return manager->AddWatcher(_watcher, _context);
 }

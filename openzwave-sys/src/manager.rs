@@ -20,6 +20,10 @@ pub use self::{
     manager_write_config as write_config,
     manager_add_node as add_node,
     manager_remove_node as remove_node,
+    manager_test_network_node as test_network_node,
+    manager_test_network as test_network,
+    manager_heal_network_node as heal_network_node,
+    manager_heal_network as heal_network,
     manager_add_watcher as add_watcher,
     manager_remove_watcher as remove_watcher,
     manager_add_driver as add_driver,
@@ -120,6 +124,10 @@ extern {
     pub fn manager_write_config(manager: *mut Manager, home_id: u32);
     pub fn manager_add_node(manager: *mut Manager, home_id: u32, secure: bool) -> bool;
     pub fn manager_remove_node(manager: *mut Manager, home_id: u32) -> bool;
+    pub fn manager_test_network_node(manager: *mut Manager, home_id: u32, node_id: u8, count: u32);
+    pub fn manager_test_network(manager: *mut Manager, home_id: u32, count: u32);
+    pub fn manager_heal_network_node(manager: *mut Manager, home_id: u32, node_id: u8, do_rr: bool);
+    pub fn manager_heal_network(manager: *mut Manager, home_id: u32, do_rr: bool);
     pub fn manager_add_watcher(manager: *mut Manager,
                                cb: extern fn(notification: *const Notification, ctx: *const c_void),
                                ctx: *const c_void) -> bool;
