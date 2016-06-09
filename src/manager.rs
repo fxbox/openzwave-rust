@@ -153,6 +153,13 @@ impl Manager {
         }).or(Err(Error::APIError("Could not remove the driver as it was not added or already removed")))
     }
 
+    pub fn remove_usb_driver(&mut self) -> Result<()> {
+        let device = CString::new("HID Controller").unwrap();
+        res_to_result(unsafe {
+            extern_manager::manager_remove_driver(self.ptr, device.as_ptr())
+        }).or(Err(Error::APIError("Could not remove the driver as it was not added or already removed")))
+    }
+
     pub fn get_poll_interval(&self) -> i32 {
         unsafe {
             extern_manager::manager_get_poll_interval(self.ptr)
