@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Options",""]],"fn":[["options_add_option_bool",""],["options_add_option_int",""],["options_add_option_string",""],["options_create",""],["options_destroy",""],["options_get",""],["options_lock",""]]});

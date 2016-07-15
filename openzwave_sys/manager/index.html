@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `manager` mod in crate `openzwave_sys`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, manager">
+
+    <title>openzwave_sys::manager - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>openzwave_sys</a></p><script>window.sidebarCurrent = {name: 'manager', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>openzwave_sys</a>::<wbr><a class='mod' href=''>manager</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-60' class='srclink' href='../../src/openzwave_sys/openzwave-sys/src/manager.rs.html#1-235' title='goto source code'>[src]</a></span></h1>
+<h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use self::{<a class='fn' href='../../openzwave_sys/manager/fn.manager_create.html' title='openzwave_sys::manager::manager_create'>manager_create</a> as create, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get.html' title='openzwave_sys::manager::manager_get'>manager_get</a> as get, <a class='fn' href='../../openzwave_sys/manager/fn.manager_destroy.html' title='openzwave_sys::manager::manager_destroy'>manager_destroy</a> as destroy, <a class='fn' href='../../openzwave_sys/manager/fn.manager_write_config.html' title='openzwave_sys::manager::manager_write_config'>manager_write_config</a> as write_config, <a class='fn' href='../../openzwave_sys/manager/fn.manager_add_node.html' title='openzwave_sys::manager::manager_add_node'>manager_add_node</a> as add_node, <a class='fn' href='../../openzwave_sys/manager/fn.manager_remove_node.html' title='openzwave_sys::manager::manager_remove_node'>manager_remove_node</a> as remove_node, <a class='fn' href='../../openzwave_sys/manager/fn.manager_test_network_node.html' title='openzwave_sys::manager::manager_test_network_node'>manager_test_network_node</a> as test_network_node, <a class='fn' href='../../openzwave_sys/manager/fn.manager_test_network.html' title='openzwave_sys::manager::manager_test_network'>manager_test_network</a> as test_network, <a class='fn' href='../../openzwave_sys/manager/fn.manager_heal_network_node.html' title='openzwave_sys::manager::manager_heal_network_node'>manager_heal_network_node</a> as heal_network_node, <a class='fn' href='../../openzwave_sys/manager/fn.manager_heal_network.html' title='openzwave_sys::manager::manager_heal_network'>manager_heal_network</a> as heal_network, <a class='fn' href='../../openzwave_sys/manager/fn.manager_add_watcher.html' title='openzwave_sys::manager::manager_add_watcher'>manager_add_watcher</a> as add_watcher, <a class='fn' href='../../openzwave_sys/manager/fn.manager_remove_watcher.html' title='openzwave_sys::manager::manager_remove_watcher'>manager_remove_watcher</a> as remove_watcher, <a class='fn' href='../../openzwave_sys/manager/fn.manager_add_driver.html' title='openzwave_sys::manager::manager_add_driver'>manager_add_driver</a> as add_driver, <a class='fn' href='../../openzwave_sys/manager/fn.manager_remove_driver.html' title='openzwave_sys::manager::manager_remove_driver'>manager_remove_driver</a> as remove_driver, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_controller_node_id.html' title='openzwave_sys::manager::manager_get_controller_node_id'>manager_get_controller_node_id</a> as get_controller_node_id, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_suc_node_id.html' title='openzwave_sys::manager::manager_get_suc_node_id'>manager_get_suc_node_id</a> as get_suc_node_id, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_primary_controller.html' title='openzwave_sys::manager::manager_is_primary_controller'>manager_is_primary_controller</a> as is_primary_controller, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_bridge_controller.html' title='openzwave_sys::manager::manager_is_bridge_controller'>manager_is_bridge_controller</a> as is_bridge_controller, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_send_queue_count.html' title='openzwave_sys::manager::manager_get_send_queue_count'>manager_get_send_queue_count</a> as get_send_queue_count, <a class='fn' href='../../openzwave_sys/manager/fn.manager_log_driver_statistics.html' title='openzwave_sys::manager::manager_log_driver_statistics'>manager_log_driver_statistics</a> as log_driver_statistics, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_controller_interface_type.html' title='openzwave_sys::manager::manager_get_controller_interface_type'>manager_get_controller_interface_type</a> as get_controller_interface_type, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_library_version.html' title='openzwave_sys::manager::manager_get_library_version'>manager_get_library_version</a> as get_library_version, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_library_type_name.html' title='openzwave_sys::manager::manager_get_library_type_name'>manager_get_library_type_name</a> as get_library_type_name, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_controller_path.html' title='openzwave_sys::manager::manager_get_controller_path'>manager_get_controller_path</a> as get_controller_path, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_poll_interval.html' title='openzwave_sys::manager::manager_get_poll_interval'>manager_get_poll_interval</a> as get_poll_interval, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_poll_interval.html' title='openzwave_sys::manager::manager_set_poll_interval'>manager_set_poll_interval</a> as set_poll_interval, <a class='fn' href='../../openzwave_sys/manager/fn.manager_enable_poll_with_intensity.html' title='openzwave_sys::manager::manager_enable_poll_with_intensity'>manager_enable_poll_with_intensity</a> as enable_poll_with_intensity, <a class='fn' href='../../openzwave_sys/manager/fn.manager_enable_poll.html' title='openzwave_sys::manager::manager_enable_poll'>manager_enable_poll</a> as enable_poll, <a class='fn' href='../../openzwave_sys/manager/fn.manager_disable_poll.html' title='openzwave_sys::manager::manager_disable_poll'>manager_disable_poll</a> as disable_poll, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_polled.html' title='openzwave_sys::manager::manager_is_polled'>manager_is_polled</a> as is_polled, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_poll_intensity.html' title='openzwave_sys::manager::manager_set_poll_intensity'>manager_set_poll_intensity</a> as set_poll_intensity, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_poll_intensity.html' title='openzwave_sys::manager::manager_get_poll_intensity'>manager_get_poll_intensity</a> as get_poll_intensity, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_label.html' title='openzwave_sys::manager::manager_get_value_label'>manager_get_value_label</a> as get_value_label, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_label.html' title='openzwave_sys::manager::manager_set_value_label'>manager_set_value_label</a> as set_value_label, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_units.html' title='openzwave_sys::manager::manager_get_value_units'>manager_get_value_units</a> as get_value_units, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_units.html' title='openzwave_sys::manager::manager_set_value_units'>manager_set_value_units</a> as set_value_units, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_help.html' title='openzwave_sys::manager::manager_get_value_help'>manager_get_value_help</a> as get_value_help, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_help.html' title='openzwave_sys::manager::manager_set_value_help'>manager_set_value_help</a> as set_value_help, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_min.html' title='openzwave_sys::manager::manager_get_value_min'>manager_get_value_min</a> as get_value_min, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_max.html' title='openzwave_sys::manager::manager_get_value_max'>manager_get_value_max</a> as get_value_max, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_value_read_only.html' title='openzwave_sys::manager::manager_is_value_read_only'>manager_is_value_read_only</a> as is_value_read_only, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_value_write_only.html' title='openzwave_sys::manager::manager_is_value_write_only'>manager_is_value_write_only</a> as is_value_write_only, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_value_set.html' title='openzwave_sys::manager::manager_is_value_set'>manager_is_value_set</a> as is_value_set, <a class='fn' href='../../openzwave_sys/manager/fn.manager_is_value_polled.html' title='openzwave_sys::manager::manager_is_value_polled'>manager_is_value_polled</a> as is_value_polled, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_bool.html' title='openzwave_sys::manager::manager_get_value_as_bool'>manager_get_value_as_bool</a> as get_value_as_bool, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_byte.html' title='openzwave_sys::manager::manager_get_value_as_byte'>manager_get_value_as_byte</a> as get_value_as_byte, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_float.html' title='openzwave_sys::manager::manager_get_value_as_float'>manager_get_value_as_float</a> as get_value_as_float, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_float_precision.html' title='openzwave_sys::manager::manager_get_value_float_precision'>manager_get_value_float_precision</a> as get_value_float_precision, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_int.html' title='openzwave_sys::manager::manager_get_value_as_int'>manager_get_value_as_int</a> as get_value_as_int, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_short.html' title='openzwave_sys::manager::manager_get_value_as_short'>manager_get_value_as_short</a> as get_value_as_short, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_string.html' title='openzwave_sys::manager::manager_get_value_as_string'>manager_get_value_as_string</a> as get_value_as_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_as_raw.html' title='openzwave_sys::manager::manager_get_value_as_raw'>manager_get_value_as_raw</a> as get_value_as_raw, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_list_selection_as_string.html' title='openzwave_sys::manager::manager_get_value_list_selection_as_string'>manager_get_value_list_selection_as_string</a> as get_value_list_selection_as_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_list_selection_as_int.html' title='openzwave_sys::manager::manager_get_value_list_selection_as_int'>manager_get_value_list_selection_as_int</a> as get_value_list_selection_as_int, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_list_items.html' title='openzwave_sys::manager::manager_get_value_list_items'>manager_get_value_list_items</a> as get_value_list_items, <a class='fn' href='../../openzwave_sys/manager/fn.manager_get_value_list_values.html' title='openzwave_sys::manager::manager_get_value_list_values'>manager_get_value_list_values</a> as get_value_list_values, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_bool.html' title='openzwave_sys::manager::manager_set_value_bool'>manager_set_value_bool</a> as set_value_bool, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_byte.html' title='openzwave_sys::manager::manager_set_value_byte'>manager_set_value_byte</a> as set_value_byte, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_float.html' title='openzwave_sys::manager::manager_set_value_float'>manager_set_value_float</a> as set_value_float, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_int.html' title='openzwave_sys::manager::manager_set_value_int'>manager_set_value_int</a> as set_value_int, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_short.html' title='openzwave_sys::manager::manager_set_value_short'>manager_set_value_short</a> as set_value_short, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_string.html' title='openzwave_sys::manager::manager_set_value_string'>manager_set_value_string</a> as set_value_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_raw.html' title='openzwave_sys::manager::manager_set_value_raw'>manager_set_value_raw</a> as set_value_raw, <a class='fn' href='../../openzwave_sys/manager/fn.manager_set_value_list_selection_string.html' title='openzwave_sys::manager::manager_set_value_list_selection_string'>manager_set_value_list_selection_string</a> as set_value_list_selection_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_listening_device.html' title='openzwave_sys::manager::manager_node_is_listening_device'>manager_node_is_listening_device</a> as is_node_listening_device, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_frequent_listening_device.html' title='openzwave_sys::manager::manager_node_is_frequent_listening_device'>manager_node_is_frequent_listening_device</a> as is_node_frequent_listening_device, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_beaming_device.html' title='openzwave_sys::manager::manager_node_is_beaming_device'>manager_node_is_beaming_device</a> as is_node_beaming_device, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_routing_device.html' title='openzwave_sys::manager::manager_node_is_routing_device'>manager_node_is_routing_device</a> as is_node_routing_device, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_security_device.html' title='openzwave_sys::manager::manager_node_is_security_device'>manager_node_is_security_device</a> as is_node_security_device, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_max_baud_rate.html' title='openzwave_sys::manager::manager_node_get_max_baud_rate'>manager_node_get_max_baud_rate</a> as get_node_max_baud_rate, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_version.html' title='openzwave_sys::manager::manager_node_get_version'>manager_node_get_version</a> as get_node_version, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_security.html' title='openzwave_sys::manager::manager_node_get_security'>manager_node_get_security</a> as get_node_security, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_zwave_plus.html' title='openzwave_sys::manager::manager_node_is_zwave_plus'>manager_node_is_zwave_plus</a> as is_node_zwave_plus, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_basic.html' title='openzwave_sys::manager::manager_node_get_basic'>manager_node_get_basic</a> as get_node_basic, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_generic.html' title='openzwave_sys::manager::manager_node_get_generic'>manager_node_get_generic</a> as get_node_generic, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_specific.html' title='openzwave_sys::manager::manager_node_get_specific'>manager_node_get_specific</a> as get_node_specific, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_type.html' title='openzwave_sys::manager::manager_node_get_type'>manager_node_get_type</a> as get_node_type, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_manufacturer_name.html' title='openzwave_sys::manager::manager_node_get_manufacturer_name'>manager_node_get_manufacturer_name</a> as get_node_manufacturer_name, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_product_name.html' title='openzwave_sys::manager::manager_node_get_product_name'>manager_node_get_product_name</a> as get_node_product_name, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_name.html' title='openzwave_sys::manager::manager_node_get_name'>manager_node_get_name</a> as get_node_name, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_location.html' title='openzwave_sys::manager::manager_node_get_location'>manager_node_get_location</a> as get_node_location, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_manufacturer_id.html' title='openzwave_sys::manager::manager_node_get_manufacturer_id'>manager_node_get_manufacturer_id</a> as get_node_manufacturer_id, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_product_type.html' title='openzwave_sys::manager::manager_node_get_product_type'>manager_node_get_product_type</a> as get_node_product_type, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_product_id.html' title='openzwave_sys::manager::manager_node_get_product_id'>manager_node_get_product_id</a> as get_node_product_id, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_query_stage.html' title='openzwave_sys::manager::manager_node_get_query_stage'>manager_node_get_query_stage</a> as get_node_query_stage, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_device_type.html' title='openzwave_sys::manager::manager_node_get_device_type'>manager_node_get_device_type</a> as get_node_device_type, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_device_type_string.html' title='openzwave_sys::manager::manager_node_get_device_type_string'>manager_node_get_device_type_string</a> as get_node_device_type_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_role.html' title='openzwave_sys::manager::manager_node_get_role'>manager_node_get_role</a> as get_node_role, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_role_string.html' title='openzwave_sys::manager::manager_node_get_role_string'>manager_node_get_role_string</a> as get_node_role_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_plus_type.html' title='openzwave_sys::manager::manager_node_get_plus_type'>manager_node_get_plus_type</a> as get_node_plus_type, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_plus_type_string.html' title='openzwave_sys::manager::manager_node_get_plus_type_string'>manager_node_get_plus_type_string</a> as get_node_plus_type_string, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_info_received.html' title='openzwave_sys::manager::manager_node_is_info_received'>manager_node_is_info_received</a> as is_node_info_received, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_awake.html' title='openzwave_sys::manager::manager_node_is_awake'>manager_node_is_awake</a> as is_node_awake, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_is_failed.html' title='openzwave_sys::manager::manager_node_is_failed'>manager_node_is_failed</a> as is_node_failed, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_neighbors.html' title='openzwave_sys::manager::manager_node_get_neighbors'>manager_node_get_neighbors</a> as get_node_neighbors, <a class='fn' href='../../openzwave_sys/manager/fn.manager_node_get_class_information.html' title='openzwave_sys::manager::manager_node_get_class_information'>manager_node_get_class_information</a> as get_node_class_information};</code></td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.ControllerInterface.html'
+                                  title='openzwave_sys::manager::ControllerInterface'>ControllerInterface</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.Manager.html'
+                                  title='openzwave_sys::manager::Manager'>Manager</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_add_driver.html'
+                                  title='openzwave_sys::manager::manager_add_driver'>manager_add_driver</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_add_node.html'
+                                  title='openzwave_sys::manager::manager_add_node'>manager_add_node</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_add_watcher.html'
+                                  title='openzwave_sys::manager::manager_add_watcher'>manager_add_watcher</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_create.html'
+                                  title='openzwave_sys::manager::manager_create'>manager_create</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_destroy.html'
+                                  title='openzwave_sys::manager::manager_destroy'>manager_destroy</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_disable_poll.html'
+                                  title='openzwave_sys::manager::manager_disable_poll'>manager_disable_poll</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_enable_poll.html'
+                                  title='openzwave_sys::manager::manager_enable_poll'>manager_enable_poll</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_enable_poll_with_intensity.html'
+                                  title='openzwave_sys::manager::manager_enable_poll_with_intensity'>manager_enable_poll_with_intensity</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get.html'
+                                  title='openzwave_sys::manager::manager_get'>manager_get</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_controller_interface_type.html'
+                                  title='openzwave_sys::manager::manager_get_controller_interface_type'>manager_get_controller_interface_type</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_controller_node_id.html'
+                                  title='openzwave_sys::manager::manager_get_controller_node_id'>manager_get_controller_node_id</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_controller_path.html'
+                                  title='openzwave_sys::manager::manager_get_controller_path'>manager_get_controller_path</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_library_type_name.html'
+                                  title='openzwave_sys::manager::manager_get_library_type_name'>manager_get_library_type_name</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_library_version.html'
+                                  title='openzwave_sys::manager::manager_get_library_version'>manager_get_library_version</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_poll_intensity.html'
+                                  title='openzwave_sys::manager::manager_get_poll_intensity'>manager_get_poll_intensity</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_poll_interval.html'
+                                  title='openzwave_sys::manager::manager_get_poll_interval'>manager_get_poll_interval</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_send_queue_count.html'
+                                  title='openzwave_sys::manager::manager_get_send_queue_count'>manager_get_send_queue_count</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_suc_node_id.html'
+                                  title='openzwave_sys::manager::manager_get_suc_node_id'>manager_get_suc_node_id</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_bool.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_bool'>manager_get_value_as_bool</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_byte.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_byte'>manager_get_value_as_byte</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_float.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_float'>manager_get_value_as_float</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_int.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_int'>manager_get_value_as_int</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_raw.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_raw'>manager_get_value_as_raw</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_short.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_short'>manager_get_value_as_short</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_as_string.html'
+                                  title='openzwave_sys::manager::manager_get_value_as_string'>manager_get_value_as_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_float_precision.html'
+                                  title='openzwave_sys::manager::manager_get_value_float_precision'>manager_get_value_float_precision</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_help.html'
+                                  title='openzwave_sys::manager::manager_get_value_help'>manager_get_value_help</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_label.html'
+                                  title='openzwave_sys::manager::manager_get_value_label'>manager_get_value_label</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_list_items.html'
+                                  title='openzwave_sys::manager::manager_get_value_list_items'>manager_get_value_list_items</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_list_selection_as_int.html'
+                                  title='openzwave_sys::manager::manager_get_value_list_selection_as_int'>manager_get_value_list_selection_as_int</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_list_selection_as_string.html'
+                                  title='openzwave_sys::manager::manager_get_value_list_selection_as_string'>manager_get_value_list_selection_as_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_list_values.html'
+                                  title='openzwave_sys::manager::manager_get_value_list_values'>manager_get_value_list_values</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_max.html'
+                                  title='openzwave_sys::manager::manager_get_value_max'>manager_get_value_max</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_min.html'
+                                  title='openzwave_sys::manager::manager_get_value_min'>manager_get_value_min</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_get_value_units.html'
+                                  title='openzwave_sys::manager::manager_get_value_units'>manager_get_value_units</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_heal_network.html'
+                                  title='openzwave_sys::manager::manager_heal_network'>manager_heal_network</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_heal_network_node.html'
+                                  title='openzwave_sys::manager::manager_heal_network_node'>manager_heal_network_node</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_bridge_controller.html'
+                                  title='openzwave_sys::manager::manager_is_bridge_controller'>manager_is_bridge_controller</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_polled.html'
+                                  title='openzwave_sys::manager::manager_is_polled'>manager_is_polled</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_primary_controller.html'
+                                  title='openzwave_sys::manager::manager_is_primary_controller'>manager_is_primary_controller</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_value_polled.html'
+                                  title='openzwave_sys::manager::manager_is_value_polled'>manager_is_value_polled</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_value_read_only.html'
+                                  title='openzwave_sys::manager::manager_is_value_read_only'>manager_is_value_read_only</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_value_set.html'
+                                  title='openzwave_sys::manager::manager_is_value_set'>manager_is_value_set</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_is_value_write_only.html'
+                                  title='openzwave_sys::manager::manager_is_value_write_only'>manager_is_value_write_only</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_log_driver_statistics.html'
+                                  title='openzwave_sys::manager::manager_log_driver_statistics'>manager_log_driver_statistics</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_basic.html'
+                                  title='openzwave_sys::manager::manager_node_get_basic'>manager_node_get_basic</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_class_information.html'
+                                  title='openzwave_sys::manager::manager_node_get_class_information'>manager_node_get_class_information</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_device_type.html'
+                                  title='openzwave_sys::manager::manager_node_get_device_type'>manager_node_get_device_type</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_device_type_string.html'
+                                  title='openzwave_sys::manager::manager_node_get_device_type_string'>manager_node_get_device_type_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_generic.html'
+                                  title='openzwave_sys::manager::manager_node_get_generic'>manager_node_get_generic</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_location.html'
+                                  title='openzwave_sys::manager::manager_node_get_location'>manager_node_get_location</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_manufacturer_id.html'
+                                  title='openzwave_sys::manager::manager_node_get_manufacturer_id'>manager_node_get_manufacturer_id</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_manufacturer_name.html'
+                                  title='openzwave_sys::manager::manager_node_get_manufacturer_name'>manager_node_get_manufacturer_name</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_max_baud_rate.html'
+                                  title='openzwave_sys::manager::manager_node_get_max_baud_rate'>manager_node_get_max_baud_rate</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_name.html'
+                                  title='openzwave_sys::manager::manager_node_get_name'>manager_node_get_name</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_neighbors.html'
+                                  title='openzwave_sys::manager::manager_node_get_neighbors'>manager_node_get_neighbors</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_plus_type.html'
+                                  title='openzwave_sys::manager::manager_node_get_plus_type'>manager_node_get_plus_type</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_plus_type_string.html'
+                                  title='openzwave_sys::manager::manager_node_get_plus_type_string'>manager_node_get_plus_type_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_product_id.html'
+                                  title='openzwave_sys::manager::manager_node_get_product_id'>manager_node_get_product_id</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_product_name.html'
+                                  title='openzwave_sys::manager::manager_node_get_product_name'>manager_node_get_product_name</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_product_type.html'
+                                  title='openzwave_sys::manager::manager_node_get_product_type'>manager_node_get_product_type</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_query_stage.html'
+                                  title='openzwave_sys::manager::manager_node_get_query_stage'>manager_node_get_query_stage</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_role.html'
+                                  title='openzwave_sys::manager::manager_node_get_role'>manager_node_get_role</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_role_string.html'
+                                  title='openzwave_sys::manager::manager_node_get_role_string'>manager_node_get_role_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_security.html'
+                                  title='openzwave_sys::manager::manager_node_get_security'>manager_node_get_security</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_specific.html'
+                                  title='openzwave_sys::manager::manager_node_get_specific'>manager_node_get_specific</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_type.html'
+                                  title='openzwave_sys::manager::manager_node_get_type'>manager_node_get_type</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_get_version.html'
+                                  title='openzwave_sys::manager::manager_node_get_version'>manager_node_get_version</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_awake.html'
+                                  title='openzwave_sys::manager::manager_node_is_awake'>manager_node_is_awake</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_beaming_device.html'
+                                  title='openzwave_sys::manager::manager_node_is_beaming_device'>manager_node_is_beaming_device</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_failed.html'
+                                  title='openzwave_sys::manager::manager_node_is_failed'>manager_node_is_failed</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_frequent_listening_device.html'
+                                  title='openzwave_sys::manager::manager_node_is_frequent_listening_device'>manager_node_is_frequent_listening_device</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_info_received.html'
+                                  title='openzwave_sys::manager::manager_node_is_info_received'>manager_node_is_info_received</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_listening_device.html'
+                                  title='openzwave_sys::manager::manager_node_is_listening_device'>manager_node_is_listening_device</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_routing_device.html'
+                                  title='openzwave_sys::manager::manager_node_is_routing_device'>manager_node_is_routing_device</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_security_device.html'
+                                  title='openzwave_sys::manager::manager_node_is_security_device'>manager_node_is_security_device</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_node_is_zwave_plus.html'
+                                  title='openzwave_sys::manager::manager_node_is_zwave_plus'>manager_node_is_zwave_plus</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_remove_driver.html'
+                                  title='openzwave_sys::manager::manager_remove_driver'>manager_remove_driver</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_remove_node.html'
+                                  title='openzwave_sys::manager::manager_remove_node'>manager_remove_node</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_remove_watcher.html'
+                                  title='openzwave_sys::manager::manager_remove_watcher'>manager_remove_watcher</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_poll_intensity.html'
+                                  title='openzwave_sys::manager::manager_set_poll_intensity'>manager_set_poll_intensity</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_poll_interval.html'
+                                  title='openzwave_sys::manager::manager_set_poll_interval'>manager_set_poll_interval</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_bool.html'
+                                  title='openzwave_sys::manager::manager_set_value_bool'>manager_set_value_bool</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_byte.html'
+                                  title='openzwave_sys::manager::manager_set_value_byte'>manager_set_value_byte</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_float.html'
+                                  title='openzwave_sys::manager::manager_set_value_float'>manager_set_value_float</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_help.html'
+                                  title='openzwave_sys::manager::manager_set_value_help'>manager_set_value_help</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_int.html'
+                                  title='openzwave_sys::manager::manager_set_value_int'>manager_set_value_int</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_label.html'
+                                  title='openzwave_sys::manager::manager_set_value_label'>manager_set_value_label</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_list_selection_string.html'
+                                  title='openzwave_sys::manager::manager_set_value_list_selection_string'>manager_set_value_list_selection_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_raw.html'
+                                  title='openzwave_sys::manager::manager_set_value_raw'>manager_set_value_raw</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_short.html'
+                                  title='openzwave_sys::manager::manager_set_value_short'>manager_set_value_short</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_string.html'
+                                  title='openzwave_sys::manager::manager_set_value_string'>manager_set_value_string</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_set_value_units.html'
+                                  title='openzwave_sys::manager::manager_set_value_units'>manager_set_value_units</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_test_network.html'
+                                  title='openzwave_sys::manager::manager_test_network'>manager_test_network</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_test_network_node.html'
+                                  title='openzwave_sys::manager::manager_test_network_node'>manager_test_network_node</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='fn' href='fn.manager_write_config.html'
+                                  title='openzwave_sys::manager::manager_write_config'>manager_write_config</a></td>
+                           <td class='docblock short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "openzwave_sys";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>
