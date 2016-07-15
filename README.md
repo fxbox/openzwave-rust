@@ -1,6 +1,10 @@
 Open-Zwave wrapper for Rust
 ===========================
 
+[Documentation](http://fxbox.github.io/openzwave-rust/openzwave/)
+
+See also the more featureful library [openzwave-stateful](https://github.com/fxbox/openzwave-stateful-rust).
+
 Installation
 ------------
 
