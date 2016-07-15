@@ -1,7 +1,13 @@
 [package]
 name = "openzwave-sys"
 version = "0.1.0"
-authors = ["Julien Wajsberg <felash@gmail.com>"]
+authors = ["Julien Wajsberg <felash@gmail.com>", "Dave Hylands <dhylands@gmail.com>"]
+description = "FFI Library to the opensource OpenZwave library"
+documentation = "https://fxbox.github.io/openzwave-rust/openzwave_sys/"
+repository = "https://github.com/fxbox/openzwave-rust"
+license = "MPL-2.0"
+keywords = ["zwave"]
+
 build = "build.rs"
 links = "openzwave"
 
