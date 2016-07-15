@@ -1,6 +1,6 @@
 [package]
 name = "openzwave"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Julien Wajsberg <felash@gmail.com>", "Dave Hylands <dhylands@gmail.com>"]
 description = "A Rust wrapper to the opensource OpenZwave library"
 documentation = "https://fxbox.github.io/openzwave-rust/openzwave/"
@@ -10,7 +10,7 @@ license = "MPL-2.0"
 keywords = ["zwave"]
 
 [dependencies]
-openzwave-sys = { path = "openzwave-sys", version = "0.1" }
+openzwave-sys = { path = "openzwave-sys", version = "0.1.1" }
 libc = "0.2"
 itertools = "0.4.11"
 
