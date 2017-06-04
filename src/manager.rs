@@ -8,7 +8,7 @@ use value_classes::value_id::ValueID;
 use error::{ Error, Result };
 
 pub struct Manager {
-    pub ptr: *mut extern_manager::Manager,
+    ptr: *mut extern_manager::Manager,
     options: Options,
     watchers: Vec<Option<Box<WatcherWrapper>>>
 }
