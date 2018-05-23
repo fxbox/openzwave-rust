@@ -1,5 +1,5 @@
 [submodule "openzwave-sys/open-zwave"]
 	path = openzwave-sys/open-zwave
-  url = https://github.com/fxbox/open-zwave.git
+  url = https://github.com/OpenZWave/open-zwave.git
   ignore = dirty
-  branch = use-default-c-compiler
+  branch = master
